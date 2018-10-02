@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet" href="../assets/layui/css/layui.css" />
+<link rel="stylesheet" href="../assets/font-awesome-4.7.0/css/font-awesome.min.css">
+<script src="../assets/layui/layui.js"></script>
+<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+
+</head>
+<body>
+
+
+<form class="layui-form">
+	<div class="layui-form-item">
+		<div class="layui-inline" style="margin-left: 10px;margin-top: 10px;">
+			<select id="checkChoiceActivity" lay-filter="activityselect">
+			</select>
+		</div>
+		<div class="layui-inline" style="margin-top: 10px;">
+			<select id="checkChoiceDate">
+			</select>
+		</div>
+		<div class="layui-inline" style="margin-top: 10px;">
+			<input type="button" class="layui-btn" data-type="reload" id="searchCheckWork" value="搜索">
+		</div>
+	</div>
+</form>
+
+<div class="layui-btn-group demoTable" style="float: right;margin-top:-60px;margin-right: 10px;">
+  <button class="layui-btn" data-type="getCheckData">批量考勤</button>
+</div>
+<table class="layui-hide" id="CheckWorktable" lay-filter="CheckWorktables"></table>
+<script type="text/html" id="barCheckWork">
+  <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+</script>
+
+</body>
+<script>
+layui.use(['table','layer','form','jquery'], function(){
+  var table = layui.table,
+  layer=layui.layer,
+  form = layui.form;
+  
+
+    table.render({
+    elem: '#CheckWorktable'
+    ,url:'../Activity_CheckWork/index_json'
+    ,height:379
+    ,id:'CheckWorkTable'
+    ,groups: 1 //只显示 1 个连续页码
+	,first: false //不显示首页
+	,last: false //不显示尾页
+	,page:{layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] }//自定义分页布局
+    ,cols: [[
+    	{type: 'checkbox',fixed: 'left'}
+    	,{field:'uname', title:'姓名', width:130,align:'center',sort: true}
+    	,{field:'check1list', title:'<a href="#" style="color:red;" class="am">上午</a>', width:130,align:'center'}
+    	,{field:'check2list', title:'<a href="#" style="color:red;" class="pm">下午</a>', width:130,align:'center'}
+    	,{field:'check3list', title:'<a href="#" style="color:red;" class="ppm">晚上</a>', width:130,align:'center'}
+    	,{field:'comments', title:'备注', width:150,align:'center'}
+      	,{fixed: 'right', title:'操作', toolbar: '#barCheckWork', width:105,align:'center'}
+    ]]
+  });
+    var arr;
+//active
+	var $ = jQuery = layui.$, active = {
+		    getCheckData: function(){ //获取选中数据
+		      var checkStatus = table.checkStatus('CheckWorkTable')
+		      ,data = checkStatus.data;
+		      //layer.alert(JSON.stringify(data));
+		      arr=new Array();
+			    for(var i=0;i<data.length;i++){
+			    	var obj=eval(data[i]);
+			    	arr.push(obj.id);
+			    }
+			    //数组转换为字符串
+			    var ids=arr.join(",");
+			    
+			    if(ids.length==0){
+			    	layer.msg('请选择行');
+			    }else{
+			    	layer.open({
+						type : 2,
+						title:'批量考勤',
+						area : ['600px','330px'],
+						fixed : false, //不固定
+						maxmin : false,
+						content : 'check.html',
+						success: function (layero, index) {
+							// 获取子页面的iframe
+							var iframe = window['layui-layer-iframe' + index];
+							// 向子页面的全局函数child传参
+							iframe.child(ids);
+						},
+						end:function(){
+							table.reload('CheckWorkTable');
+							//上午批量考勤
+					  		$(".am").click(function(){
+					  			am();
+					  		});
+					  		//下午批量考勤
+					  		jQuery(".pm").click(function(){
+					  			pm();
+					  		});
+					  		
+					  		//晚上批量考勤
+					  		$(".ppm").click(function(){
+					  			ppm();
+					  		});
+						}
+					});
+			    }
+			    
+		      
+		    },
+		    
+		    reload : function() {
+		  		//执行重载
+		  		table.reload('CheckWorkTable', {
+		  			where : {
+		  				dateselect : $("#checkChoiceDate").val(),
+		  				activityselect : $("#checkChoiceActivity").val()
+		  			}
+		  		});
+		  	//上午批量考勤
+		  		$(".am").click(function(){
+		  			am();
+		  		});
+		  		//下午批量考勤
+		  		jQuery(".pm").click(function(){
+		  			pm();
+		  		});
+		  		
+		  	//晚上批量考勤
+		  		$(".ppm").click(function(){
+		  			ppm();
+		  		});
+		  	}
+		  };
+
+  //查询
+  $('#searchCheckWork').on('click', function() {
+  	var type = $(this).data('type');
+  	active[type] ? active[type].call(this) : '';
+  });
+
+//批量修改
+$('.demoTable .layui-btn').on('click', function(){
+	var type = $(this).data('type');
+	active[type] ? active[type].call(this) : '';
+});
+	
+	
+	
+//监听事件
+  table.on('tool(CheckWorktables)', function(obj){
+	    var data = obj.data;
+	    if(obj.event === 'edit'){
+	      layer.open({
+				type : 2,
+				title:'考勤',
+				area : ['580px','320px'],
+				fixed : false, //不固定
+				maxmin : false,
+				content : '../Activity_CheckWork/edit?id='+data.id,
+				end:function(){
+					table.reload('CheckWorkTable');
+					//上午批量考勤
+			  		$(".am").click(function(){
+			  			am();
+			  		});
+			  		//下午批量考勤
+			  		jQuery(".pm").click(function(){
+			  			pm();
+			  		});
+			  		
+			  		//晚上批量考勤
+			  		$(".ppm").click(function(){
+			  			ppm();
+			  		});
+				}
+			});
+	    }
+	  });
+  
+//活动选择下拉框
+	$.post("../Activity_CheckWork/activity",function(result){
+	   	var activityObj = result;
+	   	for(var i = 0;i < activityObj.length;i++){
+	   		$("#checkChoiceActivity").append("<option value="+activityObj[i]['id']+">"+activityObj[i]['name']+"</option>");
+	   	}
+	   	var j = activityObj.length-1;
+	   	$.post("../Activity_CheckWork/date?activity_id="+activityObj[j]['id']+"",function(result){
+		   	var dateObj = result;
+		   	$("#checkChoiceDate").html("");
+		   	for(var i = 0;i < dateObj.length;i++){
+		   		$("#checkChoiceDate").append("<option value="+dateObj[i]['date']+">"+dateObj[i]['date']+"</option>");
+		   	}
+		   	form.render('select');
+		  });
+	   	
+	   	form.render('select');
+	  });
+	
+//时间选择下拉框--联动
+	form.on('select(activityselect)', function(data){
+		if(data.value.length<1){
+			$("#checkChoiceDate").html("");
+		}else{
+	   	
+		$.post("../Activity_CheckWork/date?activity_id="+data.value+"",function(result){
+		   	var dateObj = result;
+		   	$("#checkChoiceDate").html("");
+		   	for(var i = 0;i < dateObj.length;i++){
+		   		
+		   		$("#checkChoiceDate").append("<option value="+dateObj[i]['date']+">"+dateObj[i]['date']+"</option>");
+		   	}
+		   	form.render('select');
+		  });
+		}
+	});
+
+//上午批量考勤
+$(".am").click(function(){
+	am();
+});
+//下午批量考勤
+jQuery(".pm").click(function(){
+	pm();
+});
+//晚上批量考勤
+$(".ppm").click(function(){
+	ppm();
+});
+
+//上午
+function am(){
+	var checkStatus = table.checkStatus('CheckWorkTable')
+    ,data = checkStatus.data;
+    
+	var arr=new Array();
+    for(var i=0;i<data.length;i++){
+    	var obj=eval(data[i]);
+    	arr.push(obj.id);
+    }
+    //数组转换为字符串
+    var ids=arr.join(",");
+    if(ids==""){
+    	layer.close();
+    	layer.msg("请选择行");
+    }else{
+    	layer.open({
+  		  type: 2,
+  		  area : [ '190px', '75px' ],
+  		  title: false,
+  		  closeBtn: 0,
+  		  shadeClose: true,
+  		  skin: 'yourclass',
+  		  content: "single.html",
+  		  success: function (layero, index) {
+  				// 获取子页面的iframe
+  				var iframe = window['layui-layer-iframe' + index];
+  				// 向子页面的全局函数child传参
+  				iframe.child('check1',ids);
+  			},
+  			end:function(){
+				table.reload('CheckWorkTable');
+				//上午批量考勤
+		  		$(".am").click(function(){
+		  			am();
+		  		});
+		  		//下午批量考勤
+		  		jQuery(".pm").click(function(){
+		  			pm();
+		  		});
+		  		
+		  		//晚上批量考勤
+		  		$(".ppm").click(function(){
+		  			ppm();
+		  		});
+			}
+  	});
+    }
+
+}
+
+//下午
+function pm(){
+		var checkStatus = table.checkStatus('CheckWorkTable')
+	    ,data = checkStatus.data;
+	    
+		var arr=new Array();
+	    for(var i=0;i<data.length;i++){
+	    	var obj=eval(data[i]);
+	    	arr.push(obj.id);
+	    }
+	    //数组转换为字符串
+	    var ids=arr.join(",");
+	    if(ids==""){
+	    	layer.close();
+	    	layer.msg("请选择行");
+	    }else{
+	    	layer.open({
+	    		  type: 2,
+	    		  area : [ '190px', '75px' ],
+	    		  title: false,
+	    		  closeBtn: 0,
+	    		  shadeClose: true,
+	    		  skin: 'yourclass',
+	    		  content: "single.html",
+	    		  success: function (layero, index) {
+	    				// 获取子页面的iframe
+	    				var iframe = window['layui-layer-iframe' + index];
+	    				// 向子页面的全局函数child传参
+	    				iframe.child('check2',ids);
+	    			},
+	    			end:function(){
+	  				table.reload('CheckWorkTable');
+	  				//上午批量考勤
+	  		  		$(".am").click(function(){
+	  		  			am();
+	  		  		});
+	  		  		//下午批量考勤
+	  		  		jQuery(".pm").click(function(){
+	  		  			pm();
+	  		  		});
+	  		  		
+	  		  		//晚上批量考勤
+	  		  		$(".ppm").click(function(){
+	  		  			ppm();
+	  		  		});
+	  			}
+	    	});
+	    	}
+}
+
+//晚上
+function ppm(){
+		var checkStatus = table.checkStatus('CheckWorkTable')
+	    ,data = checkStatus.data;
+	    
+		var arr=new Array();
+	    for(var i=0;i<data.length;i++){
+	    	var obj=eval(data[i]);
+	    	arr.push(obj.id);
+	    }
+	    //数组转换为字符串
+	    var ids=arr.join(",");
+	    if(ids==""){
+	    	layer.close();
+	    	layer.msg("请选择行");
+	    }else{
+	    	layer.open({
+	    		  type: 2,
+	    		  area : [ '190px', '75px' ],
+	    		  title: false,
+	    		  closeBtn: 0,
+	    		  shadeClose: true,
+	    		  skin: 'yourclass',
+	    		  content: "single.html",
+	    		  success: function (layero, index) {
+	    				// 获取子页面的iframe
+	    				var iframe = window['layui-layer-iframe' + index];
+	    				// 向子页面的全局函数child传参
+	    				iframe.child('check3',ids);
+	    			},
+	    			end:function(){
+	  				table.reload('CheckWorkTable');
+	  				//上午批量考勤
+	  		  		$(".am").click(function(){
+	  		  			am();
+	  		  		});
+	  		  		//下午批量考勤
+	  		  		jQuery(".pm").click(function(){
+	  		  			pm();
+	  		  		});
+	  		  		
+	  		  		//晚上批量考勤
+	  		  		$(".ppm").click(function(){
+	  		  			ppm();
+	  		  		});
+	  		  		}
+	    			});
+	    	}
+	    }
+});
+
+</script>
+
+</html>

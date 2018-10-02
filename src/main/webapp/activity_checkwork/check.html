@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../assets/layui/css/layui.css" />
+<script src="../assets/layui/layui.js"></script>
+<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+</head>
+<body>
+	<form class="layui-form" style="margin-top:15px;">
+	
+		<div class="layui-form-item">
+			<div class="layui-input-inline" style="width:71px;margin-left:20px">
+				<input type="checkbox" lay-skin="primary" title="上午" class="am" lay-filter="am">			
+			</div>
+			<div class="layui-input-inline" style="width: 80px;">
+				<select class=" check1_name">
+					<option value="0">-</option>
+					<option value="1">正常</option>
+					<option value="2">迟到</option>
+					<option value="3">早退</option>
+					<option value="4">请假</option>
+					<option value="5">未到</option>
+				</select>				
+			</div>
+		
+			<div class="layui-input-inline" style="width:71px;margin-left:20px">
+				<input type="checkbox" lay-skin="primary" title="中午" class="pm" lay-filter="pm">			
+			</div>
+			<div class="layui-input-inline" style="width: 80px;">
+				<select class=" check2_name">
+					<option value="0">-</option>
+					<option value="1">正常</option>
+					<option value="2">迟到</option>
+					<option value="3">早退</option>
+					<option value="4">请假</option>
+					<option value="5">未到</option>
+				</select>				
+			</div>
+			
+		
+			<div class="layui-input-inline" style="width:71px;margin-left:20px">
+				<input type="checkbox" lay-skin="primary" title="上午" class="ppm" lay-filter="ppm">			
+			</div>
+			<div class="layui-input-inline" style="width: 80px;">
+				<select class=" check3_name">
+					<option value="0">-</option>
+					<option value="1">正常</option>
+					<option value="2">迟到</option>
+					<option value="3">早退</option>
+					<option value="4">请假</option>
+					<option value="5">未到</option>
+				</select>				
+			</div>
+		</div>
+			<div class="layui-input-inline" style="margin-left: 250px;margin-top: 150px;">
+				<button class="layui-btn confirm">确认</button>
+			</div>
+	</form>
+	
+</body>
+<script>
+	function child(ids) {
+		var idss = ids;
+		
+		layui.use(['table','layer','form','jquery'], function(){
+		    var table = layui.table,
+			  layer=layui.layer,
+			  form = layui.form;
+		    
+		    var am=0;
+		    var pm=0;
+		    var ppm=0;
+		    
+		    
+			
+            //获取被选中
+            form.on('checkbox(am)', function (data) {
+                if (data.elem.checked) {
+                	am=1;
+                } else {
+                	am=0;
+                }
+            });
+            form.on('checkbox(pm)', function (data) {
+                if (data.elem.checked) {
+                	pm=1;
+                } else {
+                	pm=0;
+                }
+            });
+            form.on('checkbox(ppm)', function (data) {
+                if (data.elem.checked) {
+                	ppm=1;
+                } else {
+                	ppm=0;
+                }
+            });
+           
+			$(".confirm").click(function(){
+				
+				while(am == 1){
+					$.ajax({
+						url:'../Activity_CheckWork/updatecheck',
+						data:{ids:ids,check:'check1',status:$(".check1_name").val()},
+						type:'post',
+						success:function(){
+							
+						}
+					});
+					break;
+				};
+				while(pm == 1){
+					$.ajax({
+						url:'../Activity_CheckWork/updatecheck',
+						data:{ids:ids,check:'check2',status:$(".check2_name").val()},
+						type:'post',
+						success:function(){
+							
+						}
+					});
+					break;
+				};
+				while(ppm == 1){
+					$.ajax({
+						url:'../Activity_CheckWork/updatecheck',
+						data:{ids:ids,check:'check3',status:$(".check3_name").val()},
+						type:'post',
+						success:function(){
+							
+						}
+					});
+					break;
+				};
+				
+				var index = parent.layer.getFrameIndex(window.name);
+				parent.layer.close(index);
+				
+			});
+		})
+		
+	}
+</script>
+</html>

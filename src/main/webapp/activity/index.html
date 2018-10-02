@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>activity</title>
+	<link rel="stylesheet" href="../assets/layui/css/layui.css" />
+	<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+	<script type="text/javascript" src="../assets/layui/layui.js"></script>
+</head>
+
+<body>
+	<form class="layui-form">
+		<div class="layui-form-item" style="margin-top:15px;margin-left:20px">
+			<div class="layui-input-inline">
+				<input class="layui-btn add" type="button" value="新增活动">
+			</div>
+			<div class="layui-input-inline">
+				<select class="querySelect layui-unselect" lay-filter="activity_querySelect">
+					<option value="type" selected='selected'>类型查询</option>
+					<option value="school">学校查询</option>
+				</select>
+			</div>
+			<div class="layui-input-inline type query" style="display:block">
+				<select class="typeSelect layui-unselect" lay-filter="type">
+					<option value="0" selected='selected'>实训</option>
+					<option value="1">宣讲</option>
+					<option value="2">比赛</option>
+				</select>
+			</div>
+			<div class="layui-input-inline school query" style="display:none">
+				<select class="schoolSelect" lay-filter="school">
+					<option value="">请选择学校</option>
+				</select>
+			</div>
+		</div>
+	</form>
+	<table id="activitytable" class="layui-hide" lay-filter="activityFilter"></table>
+	<script type="text/html" id="activityBar">
+		<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="options">设施</a> 
+		<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="time">时间</a>
+		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="edit">修改</a>	
+		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="student">人员</a>
+		<a class="layui-btn layui-btn-xs" lay-event="evaluation">测评</a>	
+	
+	</script>
+
+</body>
+<script>
+
+	layui.use(['table', 'form', 'laydate'], function () {
+		//date
+		var laydate = layui.laydate;
+		laydate.render({
+			elem: '#activityTime' //指定元素
+		});
+
+		//form
+		var form = layui.form;
+		form.on('select(activity_querySelect)', function (data) {
+			var query = $(".querySelect").val();
+			$(".query").css("display", "none");
+			$("." + query).css("display", "block");
+		});
+
+
+		$.post("../Activity/school", function (result) {
+			var schoolObj = result;
+			for (var i = 0; i < schoolObj.length; i++) {
+				$(".schoolSelect").append("<option value=" + schoolObj[i]['name'] + ">" + schoolObj[i]['name'] + "</option>");
+			}
+			form.render('select');
+		});
+
+		$(".add").click(function () {
+			layer.open({
+				type: 2,
+				title: '新增活动',
+				skin: 'layui-layer-rim', //加上边框
+				area: ['980px', '520px'],
+				fixed: false, //不固定
+				maxmin: true,
+				content: 'add.html',
+			});
+		});
+
+		//table
+		var table = layui.table;
+		table.render({
+			elem: '#activitytable',
+			height: 445,
+			url: '../Activity/index' //数据接口
+			, id: 'activityTable'
+			, page: {
+				layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'], //自定义分页布局
+				groups: 1,//只显示 1 个连续页码
+				first: false, //不显示首页
+				last: false, //不显示尾页
+			}
+			, cols: [[
+				{ field: 'name', title: '活动名称', width: 200, align: 'center' },
+				{ field: 'dateinfo', title: '日期安排', width: 200, align: 'center' },
+				{ field: 'school', title: '学校', width: 195, align: 'center' },
+				{ field: 'count', title: '人数', width: 90, align: 'center' },
+				{ field: 'typeName', title: '类型', width: 90, align: 'center' },
+				{ field: 'statusName', title: '状态', width: 90, align: 'center' },
+				{ field: 'attention', title: '注意事项', width: 200, align: 'center' },
+				{ fixed: 'right', title: '操作', width: 260, align: 'center', toolbar: '#activityBar' }
+			]]
+		});
+
+		//监听工具条
+		table.on('tool(activityFilter)', function (obj) {
+			var data = obj.data;
+			var id = data.id;
+			if (obj.event === 'cancel') {
+				var id = data.id;
+				var type = $(this).data('type');
+				if (data.status == 1) {
+					layer.msg("活动已取消");
+				} else {
+					layer.confirm('是否取消？', {
+						btn: ['是', '否'] //按钮
+					}, function () {
+						//是，表格刷新
+						$.post(
+							"../Activity/cancel",
+							{ id: data.id },
+							function (data) {
+								layer.msg(data.url);
+								active[type] ? active[type].call(this) : '';
+							},
+						);
+					}, function () {
+						//否，无操作
+					});
+				}
+			} else if (obj.event === 'student') {
+				layer.open({
+					type: 2,
+					title: '参与活动学生',
+					skin: 'layui-layer-rim', //加上边框
+					area: ['800px', '400px'],
+					fixed: false, //不固定
+					maxmin: true,
+					content: 'student.html?user_ids=' + data.user_ids + "&id=" + data.id,
+					cancel: function (index) {
+						table.reload('activityTable', {
+							where: {
+							}
+						});
+					}
+				});
+			}else if(obj.event === 'time'){
+				layer.open({
+					title: '活动日程安排',
+					type: 2,
+					area: ['800px', '380px'], //宽高
+					maxmin: true, //开启最大化最小化按钮
+					content: "time.html",
+					success: function (layero, index) {
+						// 获取子页面的iframe
+						var iframe = window['layui-layer-iframe' + index];
+						// 向子页面的全局函数child传参
+						iframe.child(id);
+					},
+				});
+			}else if(obj.event === 'options'){
+				layer.open({
+					title: '设施',
+					type: 2,
+					area: ['800px', '180px'], //宽高
+					maxmin: true, //开启最大化最小化按钮
+					content: "options.html",
+					success: function (layero, index) {
+						// 获取子页面的iframe
+						var iframe = window['layui-layer-iframe' + index];
+						// 向子页面的全局函数child传参
+						iframe.child(id);
+					},
+				});
+			}else if(obj.event === 'edit'){
+				layer.open({
+					title: '修改',
+					type: 2,
+					area: ['980px', '520px'], //宽高
+					maxmin: true, //开启最大化最小化按钮
+					content: "../Activity/edit?id="+id,
+				});
+			}else if(obj.event === 'evaluation'){
+				layer.open({
+					title: '测评',
+					type: 2,
+					area: ['700px', '525px'], //宽高
+					maxmin: true, //开启最大化最小化按钮
+					content: "../evaluation/index.html?f_id="+id,
+					// success: function (layero, index) {
+					// 	// 获取子页面的iframe
+					// 	var iframe = window['layui-layer-iframe' + index];
+					// 	// 向子页面的全局函数child传参
+					// 	iframe.child(id);
+					// },
+				});
+			}
+		});
+
+		//查询
+		form.on('select(type)', function (data) {
+			table.reload('activityTable', {
+				where: {
+					type: $(".typeSelect").val(),
+					school: null,
+				}
+			});
+		});
+
+		form.on('select(school)', function (data) {
+			table.reload('activityTable', {
+				where: {
+					type: null,
+					school: $(".schoolSelect").val(),
+				}
+			});
+		});
+
+
+	});
+
+	layui.use('layer', function () {
+		var layer = layui.layer;
+	});
+
+</script>
+
+</html>

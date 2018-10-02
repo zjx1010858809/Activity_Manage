@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet" href="../assets/layui/css/layui.css" />
+<script src="../assets/layui/layui.js"></script>
+<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+</head>
+<body>
+
+
+<div class="layui-form-item" style="margin-top: 30px;margin-left: -30px;">
+    
+    <div style="display: inline-block;">
+    <label class="layui-form-label">上午</label>
+      <select name="school_id" class="check1" style="width: 80px;height: 38px;border-color: #e6e6e6;">
+      	<#list ["-","正常","迟到","早退","请假","未到"] as r>
+      		<#if checkworkList.check1==r_index>
+        		<option value="${r_index}" selected="selected">${r}</option>
+        	<#else>
+        		<option value="${r_index}">${r}</option>
+        	</#if>
+        </#list>
+      </select>
+	</div>
+	
+	<div style="display: inline-block;">
+	<label class="layui-form-label">下午</label>
+      <select name="school_id" class="check2" style="width: 80px;height: 38px;border-color: #e6e6e6;">
+      	<#list ["-","正常","迟到","早退","请假","未到"] as r>
+      		<#if checkworkList.check2==r_index>
+        		<option value="${r_index}" selected="selected">${r}</option>
+        	<#else>
+        		<option value="${r_index}">${r}</option>
+        	</#if>
+        </#list>
+      </select>
+	</div>
+	
+	<div style="display: inline-block;">
+	<label class="layui-form-label">晚上</label>
+      <select name="school_id" class="check3" style="width: 80px;height: 38px;border-color: #e6e6e6;">
+      	<#list ["-","正常","迟到","早退","请假","未到"] as r>
+      		<#if checkworkList.check3==r_index>
+        		<option value="${r_index}" selected="selected">${r}</option>
+        	<#else>
+        		<option value="${r_index}">${r}</option>
+        	</#if>
+        </#list>
+      </select>
+	</div>
+    
+    <div class="layui-form-item layui-form-text" style="margin-top: 30px;">
+    <label class="layui-form-label">备注</label>
+    <div class="layui-input-block" style="width: 470px;">
+        	<textarea placeholder="请输入内容" class="layui-textarea comments">${checkworkList.comments}</textarea>
+    </div>
+  </div>
+
+	<div style="text-align: center;width: 100%;">
+		<button class="layui-btn" onclick="editCollege();">立即提交</button>
+		<input type="hidden" class="checkworkid" value="${checkworkList.id}">
+	</div>
+</div>
+</body>
+<script type="text/javascript">
+layui.use('layer',function(){
+	var layer=layui.layer;
+});
+
+//修改
+function editCollege(){
+	var check1=$(".check1").val();
+	var check2=$(".check2").val();
+	var check3=$(".check3").val();
+	var comments=$(".comments").val();
+	var id=$(".checkworkid").val();
+	
+	if(name==""){
+		layer.msg('不能为空');
+	}else{
+		$.ajax({
+			url:'update',
+			type:'post',
+			data:{check1:check1,check2:check2,check3:check3,comments:comments,id:id},
+			success:function(res){
+				if(res.status==1){
+					var index=parent.layer.getFrameIndex(window.name);
+					parent.layer.close(index);
+					//parent.location.reload();
+				}else{
+					layer.msg('失败');
+				}
+			}
+		});
+	}
+}
+
+</script>
+
+</html>

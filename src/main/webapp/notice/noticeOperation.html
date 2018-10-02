@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../assets/layui/css/layui.css" />
+<script type="text/javascript" src="../assets/layui/layui.js"></script>
+<script src="../js/jquery-2.1.0.min.js"></script>
+
+</head>
+<body>
+	<button class="layui-btn" style="margin-top:10PX;margin-left:10px" onclick="openwin('添加','../notice/noticeAdd.html','700','420')">新增</button>
+	<table class="layui-hide" id="noticeTable" lay-filter="demo"></table>
+	<script type="text/html" id="noticeBar">
+  		<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+  		<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+  		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+	</script>
+</body>
+<script>
+	var table;
+	layui.use('table', function() {
+		table = layui.table;
+		table.render({
+			elem : '#noticeTable',
+			id : 'notice_table',
+			url : '../Notice/select',
+			height : 390,
+			page : {
+				layout : [ 'limit', 'count', 'prev', 'page', 'next', 'skip' ], //自定义分页布局
+				groups : 1,//只显示 1 个连续页码
+				first : false, //不显示首页
+				last : false, //不显示尾页
+			},
+			cols : [[ 
+					{field : 'title',width : 165,title : '标题' ,align:'center'}, 
+					{field : 'aname',width : 200,title : '活动',align:'center'}, 
+					{field : 'date',width : 160,title : '时间',align:'center'},  
+					{fixed : 'right',title : '操作',toolbar:'#noticeBar',align:'center',width:200}, 
+			]]
+		});
+		//active
+		var $ = layui.$, active = {
+			reload : function() {
+				//执行重载
+				table.reload('notice_table', { 
+					where : {
+						nameText : $("#noticeName").val(),
+						schoolSelect : $("#noticeSchool").val(),
+						glevelSelect : $("#noticeGlevel").val(),
+					}
+				});
+			}
+		};
+		
+		//监听工具条
+		 table.on('tool(demo)', function(obj){
+		    var data = obj.data;
+		    var id = data.id;
+		    if(obj.event === 'detail'){
+		      layer.open({
+					type : 2,
+					title:'消息通知',
+					area : [ '500px','320px' ],
+					fixed : false, //不固定
+					maxmin : false,
+					content : '../Notice/noticeView?id='+id,
+				});
+		  	} else if(obj.event === 'del'){
+		      layer.confirm('真的删除行么', function(index){
+		    	  $.ajax({
+		              type: "POST",
+		              url: "../Notice/delete",
+		              data: {id : data.id},
+		              dataType: "json",
+		              success: function(json){
+		            	  if(json==1){
+		            		  layer.msg('删除成功！');
+		            		  location.reload();
+		            	  }else{
+		            		  layer.msg('删除失败！');
+		            	  }
+		              }
+		    	  });
+		        layer.close(index);
+		      });
+		    } else if(obj.event === 'edit'){
+		    	layer.open({
+					type : 2,
+					title:'用户信息',
+					area : [ '700px','420px' ],
+					fixed : false, //不固定
+					maxmin : false,
+					content : '../Notice/noticeEdit?id='+id,
+				});
+		    }
+		 });
+		
+	});
+	
+	layui.use('layer', function() {
+		var layer = layui.layer;
+	});
+	
+	//新增
+	function openwin(title, content, width, height) {
+		layer.open({
+			type : 2,
+			title : title,
+			area : [ width + 'px', height + 'px' ],
+			fixed : false, //不固定
+			maxmin : false,
+			content : content,
+		});
+	}
+	
+	
+</script>
+</html>

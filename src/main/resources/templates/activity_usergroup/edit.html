@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet" href="../assets/layui/css/layui.css" />
+<link rel="stylesheet" href="../css/formSelects-v4.css">
+<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+
+</head>
+<body>
+    
+    <#if activityList??>
+    	<div class="layui-inline" style="margin: 10px;">
+    	<label class="layui-form-label">活动</label>
+    	<div class="layui-input-block" style="width: 182px;">
+    		<input type="hidden" class="activity_id" value="${activityList.id}">
+    		<input type="text" class="layui-input" readonly="readonly" value="${activityList.name}">
+		</div>
+		</div>
+	<#else>
+	</#if>
+    <div class="layui-inline" style="margin: 10px;">
+      <label class="layui-form-label">小组名</label>
+      <div class="layui-input-inline">
+      <#if usergroupList??>
+        <input type="text" class="layui-input cname" value="${usergroupList.name}">
+        <#else>
+        <input type="text" class="layui-input cname" value="">
+        </#if>
+      </div>
+    </div>
+    <div class="layui-inline" style="margin: 10px;">
+      <label class="layui-form-label">项目名</label>
+      <div class="layui-input-inline">
+      <#if usergroupList??>
+        <input type="text" class="layui-input project" value="${usergroupList.project}">
+        <#else>
+        <input type="text" class="layui-input project" value="">
+        </#if>
+      </div>
+    </div>
+    
+    <div class="layui-form-item">
+    <div class="layui-inline" style="margin: 10px;">
+      <label class="layui-form-label">成员</label>
+      <div class="layui-input-inline" style="width:500px;">
+      <#if usergroupList??>
+      	
+      	
+		<#assign menuList=usergroupList.ids?split(',')>
+      	<div>
+			<select xm-select="selectId" lay-search xm-select-search>
+				<#list userList as r>
+					<#if menuList?seq_contains("${r.id}")>
+						<option value="${r.id}" selected="selected">${r.name}</option>
+					<#else>
+						<option value="${r.id}">${r.name}</option>
+					</#if>
+				</#list>
+			</select>
+		</div>
+        <#else>
+        <div>
+			<select xm-select="selectId">
+				<#list userList as r>
+					<option value="${r.id}">${r.name}</option>
+				</#list>
+			</select>
+		</div>
+        
+        </#if>
+      </div>
+    </div>
+</div>
+  
+
+
+<div class="layui-input-block">
+	<#if usergroupList??>
+		<button style="margin-left: 200px;margin-top: 160px;" class="layui-btn" onclick="editUserGroup();">立即提交</button>
+		<input type="hidden" class="usergroupid" value="${usergroupList.id}">
+	<#else>
+		<button style="margin-left: 200px;margin-top: 100px;" class="layui-btn" onclick="addUserGroup();">立即提交</button>
+		</#if>
+</div>
+
+
+<script type="text/javascript" src="../js/formSelects-v4.js" charset="utf-8"></script>
+<script type="text/javascript" src="../assets/layui/layui.js"></script>
+<script type="text/javascript" src="../js/jquery-v3.2.1.js" charset="utf-8"></script>
+
+
+
+
+<script type="text/javascript">
+layui.use(['layer','formSelects'],function(){
+	var layer=layui.layer,
+	formSelects = layui.formSelects;
+	formSelects.render('selectId');	
+});
+
+//新增
+function addUserGroup(){
+	var activity_id=$(".activity_id").val();
+	var name=$(".cname").val();
+	var ids=formSelects.value('selectId', 'valStr');
+	var project=$(".project").val();
+	
+	if(name==""||ids==""||project==""){
+		layer.msg('不能为空');
+	}else{
+		$.ajax({
+			url:'insert',
+			type:'post',
+			data:{activity_id:activity_id,name:name,ids:ids,project:project},
+			success:function(res){
+				if(res.status==1){
+					var index=parent.layer.getFrameIndex(window.name);
+					parent.layer.close(index);
+					parent.location.reload();
+				}else{
+					alert('添加失败');
+				}
+				
+			}
+		});
+	}
+}
+//修改
+function editUserGroup(){
+	var name=$(".cname").val();
+	var ids=formSelects.value('selectId', 'valStr');
+	var project=$(".project").val();
+	var id=$(".usergroupid").val();
+	
+	if(name==""||ids==""||project==""){
+		layer.msg('不能为空');
+	}else{
+		$.ajax({
+			url:'update',
+			type:'post',
+			data:{name:name,ids:ids,project:project,id:id},
+			success:function(res){
+				if(res.status==1){
+					var index=parent.layer.getFrameIndex(window.name);
+					parent.layer.close(index);
+					parent.location.reload();
+				}else{
+					alert('修改失败');
+				}
+				
+			}
+		});
+	}
+}
+
+
+</script>
+</body>
+</html>

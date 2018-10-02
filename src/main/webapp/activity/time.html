@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+    <script type="text/javascript" src="../assets/layui/layui.js"></script>
+	<link rel="stylesheet" href="../assets/layui/css/layui.css" />
+
+</head>
+
+<body>
+    <table id="activityTimeTable" class="layui-hide" lay-filter="activityTimeFilter"></table>
+</body>
+<script>
+function child(id) {
+    layui.use('table', function () {
+        var table = layui.table;
+			table
+				.render({
+					elem: '#activityTimeTable',
+					url: '../Activity_Time/index?activity_id='+id, //数据接口
+					id: 'activityTimeTable',
+					page: {
+						layout: ['limit', 'count', 'prev', 'page','next', 'skip'], //自定义分页布局
+						groups: 1,//只显示 1 个连续页码
+						first: false, //不显示首页
+						last: false, //不显示尾页
+					},
+					cols: [[ //表头
+                        {field: 'date',title: '日期',align: 'center',sort: true},
+                        {field: 'operator_name',title: '讲师',align: 'center',}, 
+                        {field: 'statusName',title: '状态',align: 'center',templet: '#activity_status'}, 
+                       ]]
+				});
+    })
+}
+</script>
+<script type="text/html" id="activity_status">
+    {{#  if(d.statusName === '进行中'){ }}
+       <span style="color: green;">{{ d.statusName }}</span>
+     {{#  } else if(d.statusName === '已结束') { }}
+       <span style="color: red;">{{ d.statusName }}</span>
+   {{#  } else if(d.statusName === '未开始') { }}
+       <span style="color: blue;">{{ d.statusName }}</span>
+     {{# } else if(d.statusName === '已取消') { }}  
+       <span style="color: gray;">{{ d.statusName }}</span>
+   {{# } }}  
+</script>
+
+</html>

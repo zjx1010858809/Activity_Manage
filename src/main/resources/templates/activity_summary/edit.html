@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet" href="../assets/layui/css/layui.css" />
+<script src="../assets/layui/layui.js"></script>
+<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+</head>
+<body>
+
+
+<div class="layui-form-item">
+	<#if summaryList??>
+    <#else>
+    <div class="layui-inline" style="margin-top: 8px;">
+      <label class="layui-form-label">选择活动</label>
+      <div class="layui-input-block" style="width: 190px;">
+		<select id="addChoiceActivity" style="width: 190px;height: 38px;border-color: #e6e6e6;">
+			<option value="">请选择活动</option>
+			<#list activityList as r>
+				<option value="${r.id}">${r.name}</option>
+			</#list>
+		</select>
+      </div>
+    </div>
+    </#if>
+
+
+    <div class="layui-inline" style="margin-top: 8px;">
+      <label class="layui-form-label">学生状况</label>
+      <div class="layui-input-block" style="width: 190px;">
+      <#if summaryList??>
+        <input type="text" class="layui-input sstatus" value="${summaryList.sstatus}">
+        <#else>
+        <input type="text" class="layui-input sstatus" value="">
+        </#if>
+      </div>
+    </div>
+    <div class="layui-inline" style="margin-top: 8px;">
+      <label class="layui-form-label">课程状况</label>
+      <div class="layui-input-block" style="width: 190px;">
+      <#if summaryList??>
+        <input type="text" class="layui-input tstatus" value="${summaryList.tstatus}">
+        <#else>
+        <input type="text" class="layui-input tstatus" value="">
+        </#if>
+      </div>
+    </div>
+    <div class="layui-inline">
+      <label class="layui-form-label">市场状况</label>
+      <div class="layui-input-block" style="width: 190px;">
+      <#if summaryList??>
+        <input type="text" class="layui-input cstatus" value="${summaryList.cstatus}">
+        <#else>
+        <input type="text" class="layui-input cstatus" value="">
+        </#if>
+      </div>
+    </div>
+    <div class="layui-inline">
+      <label class="layui-form-label">学校状况</label>
+      <div class="layui-input-block" style="width: 190px;">
+      <#if summaryList??>
+        <input type="text" class="layui-input xstatus" value="${summaryList.xstatus}">
+        <#else>
+        <input type="text" class="layui-input xstatus" value="">
+        </#if>
+      </div>
+    </div>
+    <div class="layui-inline">
+      <label class="layui-form-label">选项1</label>
+    <div class="layui-input-block">
+      <select class="options" style="width: 190px;height: 38px;border-color: #e6e6e6;">
+      	<#list ["A","B","C"] as r>
+      	
+      		<#if summaryList??>
+      		<!-- 不为空 -->
+      			<#if summaryList.options?substring(0,1)?eval==r_index>
+        		<option value="${r_index}" selected="selected">${r}</option>
+        		<#else>
+        		<option value="${r_index}">${r}</option>
+        		</#if>
+        	
+        	<#else>
+        	<!-- 为空 -->
+        		<option value="${r_index}">${r}</option>
+        	</#if>
+        </#list>
+      </select>
+	</div>
+    </div>
+    <div class="layui-inline">
+      <label class="layui-form-label">选项2</label>
+    <div class="layui-input-block">
+      <select class="options" style="width: 190px;height: 38px;border-color: #e6e6e6;">
+      	<#list ["A","B","C"] as r>
+      	
+      		<#if summaryList??>
+      		<!-- 不为空 -->
+      			<#if summaryList.options?substring(1,2)?eval==r_index>
+        		<option value="${r_index}" selected="selected">${r}</option>
+        		<#else>
+        		<option value="${r_index}">${r}</option>
+        		</#if>
+        	
+        	<#else>
+        	<!-- 为空 -->
+        		<option value="${r_index}">${r}</option>
+        	</#if>
+        </#list>
+      </select>
+	</div>
+    </div>
+    <div class="layui-inline">
+      <label class="layui-form-label">选项3</label>
+    <div class="layui-input-block">
+      <select class="options" style="width: 190px;height: 38px;border-color: #e6e6e6;">
+      	<#list ["A","B","C"] as r>
+      	
+      		<#if summaryList??>
+      		<!-- 不为空 -->
+      			<#if summaryList.options?substring(2,3)?eval==r_index>
+        		<option value="${r_index}" selected="selected">${r}</option>
+        		<#else>
+        		<option value="${r_index}">${r}</option>
+        		</#if>
+        	
+        	<#else>
+        	<!-- 为空 -->
+        		<option value="${r_index}">${r}</option>
+        	</#if>
+        </#list>
+      </select>
+	</div>
+    </div>
+    <div class="layui-inline">
+      <label class="layui-form-label">总结</label>
+      <div class="layui-input-block" style="width: 190px;">
+      <#if summaryList??>
+        <input type="text" class="layui-input summary" value="${summaryList.summary}">
+        <#else>
+        <input type="text" class="layui-input summary" value="">
+        </#if>
+      </div>
+    </div>
+    <div class="layui-inline">
+      <label class="layui-form-label">建议</label>
+      <div class="layui-input-block" style="width: 190px;">
+      <#if summaryList??>
+        <input type="text" class="layui-input proposal" value="${summaryList.proposal}">
+        <#else>
+        <input type="text" class="layui-input proposal" value="">
+        </#if>
+      </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">备注</label>
+    <div class="layui-input-block" style="width: 510px;">
+    	<#if summaryList??>
+    		<textarea placeholder="请输入内容" class="layui-textarea comments" name="comments">${summaryList.comments}</textarea>
+        <#else>
+        	<textarea placeholder="请输入内容" class="layui-textarea comments" name="comments"></textarea>
+        </#if>
+    </div>
+  </div>
+    
+</div>
+
+<div class="layui-input-inline" style="width: 100%;text-align: center;">
+	<#if summaryList??>
+		<button class="layui-btn" onclick="editSummary();">立即提交</button>
+		<input type="hidden" class="summaryid" value="${summaryList.id}">
+	<#else>
+		<button class="layui-btn" onclick="addSummary();">立即提交</button>
+		</#if>
+</div>
+</body>
+<script type="text/javascript">
+layui.use('layer',function(){
+	var layer=layui.layer;
+});
+//新增
+function addSummary(){
+	var activity_id=$("#addChoiceActivity").val();
+	var sstatus=$(".sstatus").val();
+	var tstatus=$(".tstatus").val();
+	var cstatus=$(".cstatus").val();
+	var xstatus=$(".xstatus").val();
+	var summary=$(".summary").val();
+	var proposal=$(".proposal").val();
+	var comments=$(".comments").val();
+	
+	
+	var myDate = new Date();
+	
+//格式化时间
+	var y = myDate.getFullYear();
+	var m = myDate.getMonth() + 1;
+	    m = m < 10 ? '0' + m : m;
+	var d = myDate.getDate();
+	    d = d < 10 ? ('0' + d) : d;
+	var createdate=y+'-'+m+'-'+d;
+	
+	
+	//获得选项号并拼接字符串
+		var options="";
+		  $(".options").each(function(){
+		    options=options+$(this).val();
+		  });
+	
+	
+ 	if(activity_id==""){
+		layer.msg('请选择活动');
+	}else{
+		$.ajax({
+			url:'insert',
+			type:'post',
+			data:{activity_id:activity_id,
+				sstatus:sstatus,
+				tstatus:tstatus,
+				cstatus:cstatus,
+				xstatus:xstatus,
+				options:options,
+				summary:summary,
+				proposal:proposal,
+				createdate:createdate,
+				comments:comments},
+			success:function(res){
+				if(res.status==1){
+					var index=parent.layer.getFrameIndex(window.name);
+					parent.layer.close(index);
+					parent.location.reload();
+				}else{
+					alert('失败');
+				}
+				
+			}
+		});
+	}
+}
+//修改
+function editSummary(){
+	var sstatus=$(".sstatus").val();
+	var tstatus=$(".tstatus").val();
+	var cstatus=$(".cstatus").val();
+	var xstatus=$(".xstatus").val();
+	var summary=$(".summary").val();
+	var proposal=$(".proposal").val();
+	var comments=$(".comments").val();
+	var id=$(".summaryid").val();
+	
+	//获得选项号并拼接字符串
+	var options="";
+	  $(".options").each(function(){
+	    options=options+$(this).val();
+	  });
+	
+	
+	
+	if(name==""){
+		layer.msg('不能为空');
+	}else{
+		$.ajax({
+			url:'update',
+			type:'post',
+			data:{sstatus:sstatus,
+				tstatus:tstatus,
+				cstatus:cstatus,
+				xstatus:xstatus,
+				options:options,
+				summary:summary,
+				proposal:proposal,
+				comments:comments,
+				id:id},
+			success:function(res){
+				if(res.status==1){
+					var index=parent.layer.getFrameIndex(window.name);
+					parent.layer.close(index);
+					parent.location.reload();
+				}else{
+					layer.msg('失败');
+				}
+			}
+		});
+	}
+}
+
+</script>
+
+</html>
