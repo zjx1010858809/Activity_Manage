@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet" href="../assets/layui/css/layui.css" />
+<script src="../assets/layui/layui.js"></script>
+<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+</head>
+<body>
+<div class="layui-form-item" style="margin-top: 30px;margin-left: -30px;">
+    
+    <#if schoolName??>
+    <div class="layui-inline" style="margin-top: 20px;">
+    <label class="layui-form-label">学校</label>
+    <div class="layui-input-block" style="width: 190px;">
+    	<input type="hidden" class="school_id" value="${schoolName.id}">
+    	<input type="text" class="layui-input" readonly="readonly" value="${schoolName.name}">
+	</div>
+	</div>
+	<#else>
+	</#if>
+	
+    <div class="layui-inline" style="margin-top: 20px;">
+      <label class="layui-form-label">学院</label>
+      <div class="layui-input-block" style="width: 190px;">
+      <#if collegeList??>
+      	<input type="hidden" class="school_id" value="${collegeList.school_id}">
+        <input type="text" class="layui-input cname" value="${collegeList.name}">
+        <#else>
+        <input type="text" class="layui-input cname" value="">
+        </#if>
+      </div>
+    </div>
+</div>
+<div class="layui-input-block">
+	<#if collegeList??>
+		<button class="layui-btn" onclick="editCollege();">立即提交</button>
+		<input type="hidden" class="collegeid" value="${collegeList.id}">
+	<#else>
+		<button class="layui-btn" onclick="addCollege();">立即提交</button>
+		</#if>
+</div>
+ 
+</body>
+<script type="text/javascript">
+layui.use('layer',function(){
+	var layer=layui.layer;
+});
+//新增
+function addCollege(){
+	var school_id=$(".school_id").val();
+	var name=$(".cname").val();
+	
+	if(name==""){
+		layer.msg('不能为空');
+	}else{
+		$.ajax({
+			url:'insert',
+			type:'post',
+			data:{school_id:school_id,name:name},
+			success:function(res){
+				if(res.status==1){
+					var index=parent.layer.getFrameIndex(window.name);
+					parent.layer.close(index);
+					parent.location.reload();
+				}else{
+					alert('失败');
+				}
+				
+			}
+		});
+	}
+}
+//修改
+function editCollege(){
+	var school_id=$(".school_id").val();
+	var name=$(".cname").val();
+	var id=$(".collegeid").val();
+	
+	if(name==""){
+		layer.msg('不能为空');
+	}else{
+		$.ajax({
+			url:'update',
+			type:'post',
+			data:{school_id:school_id,name:name,id:id},
+			success:function(res){
+				if(res.status==1){
+					var index=parent.layer.getFrameIndex(window.name);
+					parent.layer.close(index);
+					parent.location.reload();
+				}else{
+					alert('失败');
+				}
+				
+			}
+		});
+	}
+}
+
+</script>
+
+</html>

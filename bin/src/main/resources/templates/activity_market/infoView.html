@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../assets/layui/css/layui.css" />
+<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript" src="../assets/layui/layui.js"></script>
+
+</head>
+<body>
+
+
+${infoList}
+<#assign text>
+${infoList}
+</#assign>
+<#assign json=text?eval />
+<#list json.json as item>
+id:${item.id}, name:${item.name}
+</#list>
+
+
+
+<!-- <#list infoList as r>
+${r.name}
+</#list> -->
+<!-- <#assign json=infoList?eval />
+
+<#list json as r>
+${r.id}
+</#list> -->
+
+
+<!-- 
+<#assign text>
+{"res":"0","msg":"OK","userlist":[{"id":"3","name":"cc","sex":"女","age":"20"}]}
+</#assign>
+
+<#assign json=text?eval />
+
+<#list json.userlist as item>
+
+id:${item.id}, name:${item.name},sex:${item.sex}
+
+</#list> -->
+
+		
+</body>
+
+</html>

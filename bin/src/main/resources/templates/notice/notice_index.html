@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../assets/layui/css/layui.css" />
+<script type="text/javascript" src="../assets/layui/layui.js"></script>
+<script src="../js/jquery-2.1.0.min.js"></script>
+<style type="text/css">
+table {
+	position: absolute;
+	margin-left: 3%;
+	margin-top: 5%;
+}
+
+tr {
+	border: 1px solid #E6E6E6;
+}
+
+td {
+	border: 1px solid #E6E6E6;
+	text-align: center;
+	width: 150px;
+}
+
+th {
+	border: 1px solid #E6E6E6;
+	text-align: center;
+	width: 150px;
+}
+</style>
+
+</head>
+<body>
+	<table>
+		<tr>
+			<th>标题</th>
+			<th>活动</th>
+			<th>日期</th>
+		</tr>
+		<#list noticeIndex as r>
+		<tr class="tr">
+			<td><a href="noticeView?id=${r.id}" >${r.title}</a></td>
+			<td><a href="noticeView?id=${r.id}" >${r.aname}</a></td>
+			<td><a href="noticeView?id=${r.id}" >${r.date}</a></td>
+		</tr>
+		</#list>
+	</table>
+	
+</body>
+</html>

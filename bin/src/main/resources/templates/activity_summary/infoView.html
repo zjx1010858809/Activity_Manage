@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../assets/layui/css/layui.css" />
+<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript" src="../assets/layui/layui.js"></script>
+
+</head>
+<body>
+<div class="layui-form-item">
+	<div class="layui-inline" style="margin-top: 8px;">
+	<label class="layui-form-label">活动名称</label>
+		<div class="layui-input-block" style="width: 190px;">
+		<#if infoList??>
+			<#list activityList as r>
+			<#if infoList.activity_id==r.id>
+				<input readonly="readonly" type="text" class="layui-input" value="${r.name}">
+			</#if>
+			</#list>
+   		<#else>
+    	</#if>
+    	</div>
+	</div>
+	<div class="layui-inline" style="margin-top: 8px;">
+      <label class="layui-form-label">创建时间</label>
+      <div class="layui-input-block" style="width: 190px;">
+      	<#if infoList??>
+        <input readonly="readonly" type="text" class="layui-input" value="${infoList.createdate}">
+        <#else>
+        <input readonly="readonly" type="text" class="layui-input" value="">
+        </#if>
+      </div>
+    </div>
+	
+
+    <div class="layui-inline">
+      <label class="layui-form-label">学生状况</label>
+      <div class="layui-input-block" style="width: 190px;">
+      	<#if infoList??>
+        <input readonly="readonly" type="text" class="layui-input" value="${infoList.sstatus}">
+        <#else>
+        <input readonly="readonly" type="text" class="layui-input" value="">
+        </#if>
+      </div>
+    </div>
+    <div class="layui-inline">
+      <label class="layui-form-label">课程状况</label>
+      <div class="layui-input-block" style="width: 190px;">
+      <#if infoList??>
+        <input readonly="readonly" type="text" class="layui-input" value="${infoList.tstatus}">
+        <#else>
+        <input readonly="readonly" type="text" class="layui-input" value="">
+        </#if>
+      </div>
+    </div>
+    <div class="layui-inline">
+      <label class="layui-form-label">市场状况</label>
+      <div class="layui-input-block" style="width: 190px;">
+      <#if infoList??>
+        <input readonly="readonly" type="text" class="layui-input" value="${infoList.cstatus}">
+        <#else>
+        <input readonly="readonly" type="text" class="layui-input" value="">
+        </#if>
+      </div>
+    </div>
+    <div class="layui-inline">
+      <label class="layui-form-label">学校状况</label>
+      <div class="layui-input-block" style="width: 190px;">
+      <#if infoList??>
+        <input readonly="readonly" type="text" class="layui-input" value="${infoList.xstatus}">
+        <#else>
+        <input readonly="readonly" type="text" class="layui-input" value="">
+        </#if>
+      </div>
+    </div>
+    <div class="layui-inline">
+      <label class="layui-form-label">选项1</label>
+    <div class="layui-input-block">
+      <select disabled style="width: 190px;height: 38px;border-color: #e6e6e6;">
+      	<#list ["A","B","C"] as r>
+      	
+      		<#if infoList??>
+      		<!-- 不为空 -->
+      			<#if infoList.options?substring(0,1)?eval==r_index>
+        		<option value="${r_index}" selected="selected">${r}</option>
+        		<#else>
+        		<option value="${r_index}">${r}</option>
+        		</#if>
+        	
+        	<#else>
+        	<!-- 为空 -->
+        		<option value="${r_index}">${r}</option>
+        	</#if>
+        </#list>
+      </select>
+	</div>
+    </div>
+    <div class="layui-inline">
+      <label class="layui-form-label">选项2</label>
+    <div class="layui-input-block">
+      <select disabled style="width: 190px;height: 38px;border-color: #e6e6e6;">
+      	<#list ["A","B","C"] as r>
+      	
+      		<#if infoList??>
+      		<!-- 不为空 -->
+      			<#if infoList.options?substring(1,2)?eval==r_index>
+        		<option value="${r_index}" selected="selected">${r}</option>
+        		<#else>
+        		<option value="${r_index}">${r}</option>
+        		</#if>
+        	
+        	<#else>
+        	<!-- 为空 -->
+        		<option value="${r_index}">${r}</option>
+        	</#if>
+        </#list>
+      </select>
+	</div>
+    </div>
+    <div class="layui-inline">
+      <label class="layui-form-label">选项3</label>
+    <div class="layui-input-block">
+      <select disabled="disabled" style="width: 190px;height: 38px;border-color: #e6e6e6;">
+      	<#list ["A","B","C"] as r>
+      	
+      		<#if infoList??>
+      		<!-- 不为空 -->
+      			<#if infoList.options?substring(2,3)?eval==r_index>
+        		<option value="${r_index}" selected="selected">${r}</option>
+        		<#else>
+        		<option value="${r_index}">${r}</option>
+        		</#if>
+        	
+        	<#else>
+        	<!-- 为空 -->
+        		<option value="${r_index}">${r}</option>
+        	</#if>
+        </#list>
+      </select>
+	</div>
+    </div>
+    <div class="layui-inline">
+      <label class="layui-form-label">总结</label>
+      <div class="layui-input-block" style="width: 190px;">
+      <#if infoList??>
+        <input readonly="readonly" type="text" class="layui-input" value="${infoList.summary}">
+        <#else>
+        <input readonly="readonly" type="text" class="layui-input" value="">
+        </#if>
+      </div>
+    </div>
+    <div class="layui-inline">
+      <label class="layui-form-label">建议</label>
+      <div class="layui-input-block" style="width: 190px;">
+      <#if infoList??>
+        <input readonly="readonly" type="text" class="layui-input" value="${infoList.proposal}">
+        <#else>
+        <input readonly="readonly" type="text" class="layui-input" value="">
+        </#if>
+      </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">备注</label>
+    <div class="layui-input-block" style="width: 505px;">
+    	<#if infoList??>
+    		<textarea placeholder="请输入内容" class="layui-textarea">${infoList.comments}</textarea>
+        <#else>
+        	<textarea placeholder="请输入内容" class="layui-textarea"></textarea>
+        </#if>
+    </div>
+  </div>
+    
+</div>
+</body>
+
+</html>

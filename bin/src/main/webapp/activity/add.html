@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" href="../assets/layui/css/layui.css" />
+	<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+	<script type="text/javascript" src="../assets/layui/layui.js"></script>
+</head>
+
+<body>
+	<div class="layui-tab layui-tab-card">
+		<ul class="layui-tab-title">
+			<li class="layui-this">基本</li>
+			<li>组织</li>
+			<li>设施</li>
+		</ul>
+		<div class="layui-tab-content" style="height: 320px;">
+			<div class="layui-tab-item layui-show">
+				<form class="layui-form" style="margin-top: 15px">
+					<div class="layui-form-item">
+						<label class="layui-form-label">活动名称：</label>
+						<div class="layui-input-inline">
+							<input type="text" class="layui-input name">
+						</div>
+						<label class="layui-form-label">课程信息：</label>
+						<div class="layui-input-inline">
+							<input type="text" class="layui-input courseInfo">
+						</div>
+						<label class="layui-form-label">时间安排：</label>
+						<div class="layui-input-inline">
+							<input id="acStartDate" type="text" class="layui-input dateInfo" placeholder="">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">负责人：</label>
+						<div class="layui-input-inline">
+							<select class="layui-unselect operator">
+								<option value="0">-</option>
+							</select>
+						</div>
+						<label class="layui-form-label">活动类型：</label>
+						<div class="layui-input-inline">
+							<select class="layui-unselect type" lay-filter="">
+								<option value="0">实训</option>
+								<option value="1">宣讲</option>
+								<option value="2">比赛</option>
+							</select>
+						</div>
+					</div>
+					<label class="layui-form-label">计划安排：</label>
+					<div class="layui-input-block" style="width: 450px">
+						<textarea name="" class="layui-textarea planInfo" style="height: 150px"></textarea>
+					</div>
+				</form>
+			</div>
+			<div class="layui-tab-item">
+				<form class="layui-form" style="margin-top: 15px">
+					<div class="layui-form-item">
+						<label class="layui-form-label">来源人：</label>
+						<div class="layui-input-inline">
+							<select class="layui-unselect source_operator">
+								<option value="0">-</option>
+							</select>
+						</div>
+						<label class="layui-form-label">辅导员：</label>
+						<div class="layui-input-inline">
+							<select class="layui-unselect Instructor_user">
+								<option value="0">-</option>
+							</select>
+						</div>
+						<label class="layui-form-label">参与学校：</label>
+						<div class="layui-input-inline">
+							<input type="text" class="layui-input school">
+						</div>
+					</div>
+					<label class="layui-form-label">备注：</label>
+					<div class="layui-input-block" style="width: 450px">
+						<textarea name="" class="layui-textarea comments" style="height: 150px"></textarea>
+					</div>
+				</form>
+			</div>
+			<div class="layui-tab-item">
+				<form class="layui-form" style="margin-top: 15px">
+					<div class="layui-form-item">
+						<label class="layui-form-label">设备安排：</label>
+						<div class="layui-input-inline" style="margin-top: 16px; width: 360px; margin-top: 0">
+							<input type="checkbox" class="Projector" lay-filter="Projector" title="投影">
+							<input type="checkbox" class="Microphone" lay-filter="Microphone" title="话筒">
+							<input type="checkbox" class="Insert" lay-filter="Insert" title="插排">
+						</div>
+					</div>
+					<label class="layui-form-label">注意事项：</label>
+					<div class="layui-input-block" style="width: 450px">
+						<textarea name="" class="layui-textarea attention" style="height: 150px"></textarea>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-input-inline" style="float: right;text-align: right">
+			<input class="layui-btn add" type="button" value="确定">
+		</div>
+	</div>
+</body>
+<script>
+	layui.use('layer', function () {
+		var layer = layui.layer;
+	});
+
+	layui.use(['form', 'element'], function () {
+		var form = layui.form;
+		var element = layui.element;
+		//负责人
+		$.post("../Activity_Time/Operators", function (result) {
+			var operatorObj = result;
+			for (var m = 0; m < operatorObj.length; m++) {
+				$(".operator").append("<option value=" + operatorObj[m]['id'] + ">" + operatorObj[m]['name'] + "</option>");
+				$(".source_operator").append("<option value=" + operatorObj[m]['id'] + ">" + operatorObj[m]['name'] + "</option>");
+			}
+			form.render('select');
+		});
+
+		//option列
+		var projector = "0";
+		var microphone = "0";
+		var insert = "0";
+		form.on('checkbox(Projector)', function (data) {
+			if (data.elem.checked) {
+				projector = "1";
+			} else {
+				projector = "0";
+			}
+		});
+		form.on('checkbox(Microphone)', function (data) {
+			if (data.elem.checked) {
+				microphone = "1";
+			} else {
+				microphone = "0";
+			}
+		});
+		form.on('checkbox(Insert)', function (data) {
+			if (data.elem.checked) {
+				insert = "1";
+			} else {
+				insert = "0";
+			}
+		});
+
+		//获取option信息
+		function getOption() {
+			return projector + microphone + insert;
+		}
+
+		$(".add").click(function () {
+			$.post(
+				'../Activity/insert',
+				{
+					//课程信息
+					courseinfo: $(".courseInfo").val(),
+					//计划信息
+					planinfo: $(".planInfo").val(),
+					//时间信息
+					dateinfo: $(".dateInfo").val(),
+					//参与学校
+					school: $(".school").val(),
+					//活动名	
+					name: $(".name").val(),
+					//来源人	
+					source_operator_id: $(".source_operator").val(),
+					//设备
+					options: getOption(),
+					//注意事项
+					attention: $(".attention").val(),
+					//活动类型	
+					type: $(".type").val(),
+					//辅导员id
+					Instructor_user_id: $(".Instructor_user").val(),
+					//负责人	
+					operator_id: $(".operator").val(),
+					//备注
+					comments: $(".comments").val(),
+					//创建日期
+					createdate: getNowFormatDate(),
+					//活动人数
+					count: 0,
+					//参与的学生
+					user_ids: '',
+					//最后修改人		
+					charge_operator_id: 0,
+				},
+				function (data) {
+					alert(data.url);
+					window.parent.location.reload();
+					var index = parent.layer.getFrameIndex(window.name);
+					parent.layer.close(index);
+				} ,
+			)
+		});
+	});
+
+	function getNowFormatDate() {
+		var date = new Date();
+		var seperator1 = "-";
+		var year = date.getFullYear();
+		var month = date.getMonth() + 1;
+		var strDate = date.getDate();
+		if (month >= 1 && month <= 9) {
+			month = "0" + month;
+		}
+		if (strDate >= 0 && strDate <= 9) {
+			strDate = "0" + strDate;
+		}
+		var currentdate = year + seperator1 + month + seperator1 + strDate;
+		return currentdate;
+	}
+
+
+</script>
+
+</html>

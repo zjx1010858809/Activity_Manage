@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="../assets/layui/css/layui.css" />
+    <script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+    <script type="text/javascript" src="../assets/layui/layui.js"></script>
+    <script>
+        layui.use(['laydate', 'form'], function () {
+            var laydate = layui.laydate;
+            var form = layui.form;
+            laydate.render({
+                elem: '#acTimeAddDate',
+                min: getTime(),
+            });
+
+            laydate.render({ 
+            	  elem: '#time1',
+            	  format: 'HH:mm', //可任意组合
+            	type: 'time'
+            }); 
+           
+            laydate.render({ 
+          	  elem: '#time2',
+          	  format: 'HH:mm',type: 'time'
+
+            });
+            
+            laydate.render({ 
+          	  elem: '#time3',
+          	  format: 'HH:mm',type: 'time' //可任意组合
+            }); 
+            
+            laydate.render({ 
+              elem: '#time4',
+              format: 'HH:mm',type: 'time' //可任意组合
+            }); 
+          
+            laydate.render({ 
+              elem: '#time5',
+              format: 'HH:mm',type: 'time' //可任意组合
+            }); 
+            
+            laydate.render({ 
+          	  elem: '#time6',
+          	  format: 'HH:mm',type: 'time' //可任意组合
+            }); 
+          
+            $.post("../Activity_Time/teachers",
+                function (result) {
+                    var teacherObj = result;
+                    for (var i = 0; i < teacherObj.length; i++) {
+                        $(".operators").append("<option value=" + teacherObj[i]['id'] + ">" + teacherObj[i]['name'] + "</option>");
+                    }
+                    form.render('select');
+                });
+        });
+
+        function getTime() {
+            var t = new Date();
+            var y = t.getFullYear();
+            var m = t.getMonth() + 1;
+            if (m < 10) {
+                m = "0" + m;
+            }
+            var d = t.getDate();
+            var theday = y + "-" + m + "-" + d;
+            return theday;
+        }
+    </script>
+</head>
+
+<body>
+    <form class='layui-form myForm' style="margin-top:15px ">
+        <div class='layui-form-item'>
+            <label class='layui-form-label'>日期:</label>
+            <div class='layui-input-inline'>
+                <input type='text' class='layui-input' id="acTimeAddDate" />
+            </div>
+            <label class='layui-form-label'>场地安排:</label>
+            <div class='layui-input-inline'>
+                <input type='text' class='layui-input roomInfo' />
+            </div>
+            <label class='layui-form-label'>讲师:</label>
+            <div class='layui-input-inline'>
+                <select class='layui-unselect operators'></select>
+            </div>
+        </div>
+        <div class='layui-form-item'>
+            <label class='layui-form-label'>早:</label>
+            <div class='layui-input-inline'>
+                <input type='text' class='layui-input time1' id="time1" placeholder="HH:mm"/>
+            </div>
+            <label class='layui-form-label' style="text-align: center">——</label>
+            <div class='layui-input-inline'>
+                <input type='text' class='layui-input time2' id="time2" placeholder="HH:mm"/>
+            </div>
+        </div>
+        <div class='layui-form-item'>
+            <label class='layui-form-label'>中:</label>
+            <div class='layui-input-inline'>
+                <input type='text' class='layui-input time3' id="time3" placeholder="HH:mm"/>
+            </div>
+            <label class='layui-form-label' style="text-align: center">——</label>
+            <div class='layui-input-inline'>
+                <input type='text' class='layui-input time4' id="time4" placeholder="HH:mm"/>
+            </div>
+        </div>
+        <div class='layui-form-item'>
+            <label class='layui-form-label'>晚:</label>
+            <div class='layui-input-inline'>
+                <input type='text' class='layui-input time5' id="time5" placeholder="HH:mm"/>
+            </div>
+            <label class='layui-form-label' style="text-align: center">——</label>
+            <div class='layui-input-inline'>
+                <input type='text' class='layui-input time6' id="time6" placeholder="HH:mm"/>
+            </div>
+        </div>
+        <hr>
+        <div class='layui-form-item'>
+            <input type="button" class="layui-btn confirm" style="margin-right: 75px;float:right" value="确认">
+        </div>
+    </form>
+</body>
+<script>
+    function child(id) {
+        $(".confirm").click(function () {
+            $.post(
+                '../Activity_Time/Add',
+                {
+                    activity_id: id,
+                    roominfo: $(".roomInfo").val(),
+                    date: $("#acTimeAddDate").val(),
+                    operator_id: $(".operators").val(),
+                    time1: $(".time1").val(),
+                    time2: $(".time2").val(),
+                    time3: $(".time3").val(),
+                    time4: $(".time4").val(),
+                    time5: $(".time5").val(),
+                    time6: $(".time6").val(),
+                },
+                function (data) {
+                    if (data.status == 0) {
+                        alert(data.url);
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                    } else {
+                        alert(data.url);
+                    }
+                }
+            );
+        });
+    }
+</script>
+
+</html>

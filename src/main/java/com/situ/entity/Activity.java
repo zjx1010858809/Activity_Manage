@@ -14,7 +14,7 @@ public class Activity {
 	private String createdate; // 创建时间
 	private Integer status; // 状态 - 正常/取消
 	private String comments; // 备注
-	private String Instructor_user_ids; // 活动参与的辅导员
+	private Integer Instructor_user_id; // 活动参与的辅导员
 	private Integer source_operator_id; // 来源人
 	private Integer operator_id; // 添加人
 	private Integer charge_operator_id; // 负责人
@@ -169,13 +169,13 @@ public class Activity {
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
-
-	public String getInstructor_user_ids() {
-		return Instructor_user_ids;
+	
+	public Integer getInstructor_user_id() {
+		return Instructor_user_id;
 	}
 
-	public void setInstructor_user_ids(String instructor_user_ids) {
-		Instructor_user_ids = instructor_user_ids;
+	public void setInstructor_user_id(Integer instructor_user_id) {
+		this.Instructor_user_id = instructor_user_id;
 	}
 
 	public Integer getOperator_id() {

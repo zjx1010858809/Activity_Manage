@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet" href="../assets/layui/css/layui.css" />
+<script src="../assets/layui/layui.js"></script>
+<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+</head>
+<body>
+
+
+<div class="layui-form-item">
+    
+    <div class="layui-inline" style="margin: 10px;width: 150px;">
+      <label class="layui-form-label">分数1</label>
+      <div class="layui-input-block" style="width: 100px;">
+        <input type="number" class="layui-input point1" value="${usergroupList.point1}">
+      </div>
+    </div>
+    <div class="layui-inline" style="margin: 10px;width: 150px;">
+      <label class="layui-form-label">分数2</label>
+      <div class="layui-input-block" style="width: 100px;">
+        <input type="number" class="layui-input point2" value="${usergroupList.point2}">
+      </div>
+    </div>
+    <div class="layui-inline" style="margin: 10px;width: 150px;">
+      <label class="layui-form-label">分数3</label>
+      <div class="layui-input-block" style="width: 100px;">
+        <input type="number" class="layui-input point3" value="${usergroupList.point3}">
+      </div>
+    </div>
+    <div class="layui-inline" style="margin: 10px;width: 150px;">
+      <label class="layui-form-label">分数4</label>
+      <div class="layui-input-block" style="width: 100px;">
+        <input type="number" class="layui-input point4" value="${usergroupList.point4}">
+      </div>
+    </div>
+    <div class="layui-inline" style="margin: 10px;width: 150px;">
+      <label class="layui-form-label">分数5</label>
+      <div class="layui-input-block" style="width: 100px;">
+        <input type="number" class="layui-input point5" value="${usergroupList.point5}">
+      </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">备注</label>
+    <div class="layui-input-block" style="width: 500px;">
+    	<#if usergroupList??>
+        	<textarea placeholder="请输入内容" class="layui-textarea comments" name="comments">${usergroupList.comments}</textarea>
+        <#else>
+        	<textarea placeholder="请输入内容" class="layui-textarea comments" name="comments"></textarea>
+        </#if>
+    </div>
+  </div>
+	
+	
+	
+	<div style="text-align: center;width: 100%;">
+		<button class="layui-btn" onclick="editScore();">立即提交</button>
+		<input type="hidden" class="userGroupid" value="${usergroupList.id}">
+	</div>
+</div>
+</body>
+<script type="text/javascript">
+layui.use('layer',function(){
+	var layer=layui.layer;
+});
+
+//修改
+function editScore(){
+	var point1=$(".point1").val();
+	var point2=$(".point2").val();
+	var point3=$(".point3").val();
+	var point4=$(".point4").val();
+	var point5=$(".point5").val();
+	var comments=$(".comments").val();
+	
+	var id=$(".userGroupid").val();
+	
+		$.ajax({
+			url:'upscore',
+			type:'post',
+			data:{point1:point1,point2:point2,point3:point3,point4:point4,point5:point5,comments:comments,id:id},
+			success:function(res){
+				if(res.status==1){
+					var index=parent.layer.getFrameIndex(window.name);
+					parent.layer.close(index);
+					parent.location.reload();
+				}else{
+					layer.msg('失败');
+				}
+			}
+		});
+}
+
+</script>
+
+</html>
