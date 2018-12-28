@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>项目二</title>
+<link rel="stylesheet" href="../assets/layui/css/layui.css" />
+<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript" src="../assets/layui/layui.js"></script>
+<script type="text/javascript">
+$(function(){
+	function GetQueryString(name){
+		var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		var r = window.location.search.substr(1).match(reg);
+		if(r!=null)return  unescape(r[2]); return null;
+	}
+
+	var ids = GetQueryString("ids");
+	$(".ids").val(ids);
+})
+
+</script>
+</head>
+<body>
+	<form class="layui-form" action="">
+		<div class="layui-form-item" style="margin-top: 25px">
+			<div class="layui-inline" style="width: 210px">
+				<label class="layui-form-label" style="width: 60px; padding-right: 2px">姓名：</label>
+				<div class="layui-input-inline" style="width: 120px; margin-right: 2px">
+					<input type="text" style="width: 120px;" name="name" class="layui-input operatorNike" value="选中的学生..." disabled="disabled"> 
+					<input type="hidden" style="width: 120px;" name="ids" class="layui-input ids">
+				</div>
+			</div>
+
+			<!-- <div class="layui-form-item" style="margin-top: 25px">	
+			<div class="layui-inline">
+				<label class="layui-form-label">活动名称：</label>
+				<div class="layui-input-inline">
+					<input type="text" style="width: 240px;" name="activity_id" class="layui-input operatorNike" value="${evaluationEdit.aname}" disabled="disabled">
+				</div>
+			</div>
+		</div> -->
+
+			<div class="layui-inline">
+				<label class="layui-form-label"
+					style="width: 60px; padding-left: 2px; padding-left: 2px; padding-right: 2px">分数：</label>
+				<div class="layui-input-inline" style="width: 140px">
+					<input type="number" style="width: 120px;" name="point" class="layui-input pointss" value="">
+				</div>
+			</div>
+		</div>
+		<div class="layui-form-item layui-form-text">
+			<label class="layui-form-label" style="width: 60px">评语：</label>
+			<div class="layui-input-block" style="margin-right: 50px">
+				<textarea placeholder="请输入内容" class="layui-textarea" name="remark" style="margin-left: -33px;"></textarea>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<div class="layui-input-block" style="text-align: center;">
+				<input class="layui-btn submit" style="margin-left: -90px;" type="button" value="提交">
+			</div>
+		</div>
+	</form>
+	<script type="text/javascript">
+		layui.use([ 'form', 'layer' ], function() {
+			var form = layui.form;
+			var layer = layui.layer;
+
+			$('.submit').on('click', function() {
+				if($(".pointss").val()==""){
+					layer.msg("分数不能为空");
+				}else{
+					$.post("../Evaluation/batchScore", $('.layui-form').serialize(),
+							function(json) {
+								if (json.status > 0) {
+									layer.msg(json.url);
+									var index = parent.layer.getFrameIndex(window.name);
+									parent.layer.close(index);
+									//parent.location.reload();
+								} else {
+									layer.msg(json.url);
+								}
+							});
+				}
+				
+			});
+		});
+	</script>
+</body>
+</html>

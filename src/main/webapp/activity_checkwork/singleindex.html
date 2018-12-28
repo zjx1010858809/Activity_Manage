@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet" href="../assets/layui/css/layui.css" />
+<link rel="stylesheet" href="../assets/font-awesome-4.7.0/css/font-awesome.min.css">
+<script src="../assets/layui/layui.js"></script>
+<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+function GetQueryString(name){
+	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+	var r = window.location.search.substr(1).match(reg);
+	if(r!=null)return  unescape(r[2]); return null;
+};
+</script>
+
+</head>
+<body>
+
+
+<form class="layui-form">
+	<div class="layui-form-item">
+		<div class="layui-inline" style="margin-left: 10px;margin-top: 10px;">
+			<select id="singleCheckChoiceActivity" lay-filter="activityselect">
+			</select>
+		</div>
+		<div class="layui-inline" style="margin-top: 10px;">
+			<input type="button" class="layui-btn" data-type="reload" id="singleSearchCheckWork" value="搜索">
+		</div>
+	</div>
+</form>
+
+<table class="layui-hide" id="CheckWorkSingle" lay-filter="CheckWorktables"></table>
+
+</body>
+
+<script>
+
+layui.use(['table','layer','form','jquery'], function(){
+  var table = layui.table,
+  layer=layui.layer,
+  form = layui.form;
+  
+  table.render({
+	    elem: '#CheckWorkSingle'
+	    ,url:'../Activity_CheckWork/singleindex_json'
+	    ,height:379
+	    ,id:'CheckWorkSingle'
+	    ,groups: 1 //只显示 1 个连续页码
+		,first: false //不显示首页
+		,last: false //不显示尾页
+		,page:{layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] }//自定义分页布局
+	    ,cols: [[
+	    	{field:'date', title:'日期', width:130,align:'center',sort: true}
+	    	,{field:'check1list', title:'<a>上午</a>', width:130,align:'center'}
+	    	,{field:'check2list', title:'<a>下午</a>', width:130,align:'center'}
+	    	,{field:'check3list', title:'<a>晚上</a>', width:130,align:'center'}
+	    	,{field:'comments', title:'备注', width:150,align:'center'}
+	    ]]
+	  });
+  
+//active
+	var $ = jQuery = layui.$, active = {
+		   
+		    reload : function() {
+		  		//执行重载
+		  		table.reload('CheckWorkSingle', {
+		  			where : {
+		  				activityselect : $("#singleCheckChoiceActivity").val()
+		  			}
+		  		});
+		  	}
+		  };
+
+  //查询
+  $('#singleSearchCheckWork').on('click', function() {
+  	var type = $(this).data('type');
+  	active[type] ? active[type].call(this) : '';
+  });
+
+//活动选择下拉框
+	$.post("../Activity_CheckWork/singleactivity",function(result){
+	   	var activityObj = result;
+	   	for(var i = 0;i < activityObj.length;i++){
+	   			$("#singleCheckChoiceActivity").append("<option value="+activityObj[i]['activity_id']+">"+activityObj[i]['aname']+"</option>");
+	   	}
+	   	form.render('select');
+	  });
+
+});
+
+</script>
+
+</html>

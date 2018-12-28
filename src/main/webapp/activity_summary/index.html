@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet" href="../assets/layui/css/layui.css" />
+<link rel="stylesheet" href="../assets/font-awesome-4.7.0/css/font-awesome.min.css">
+<script src="../assets/layui/layui.js"></script>
+<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+
+
+<script>
+
+layui.use(['table','layer'], function(){
+	var table = layui.table;
+	var layer=layui.layer;
+});
+
+//新增合作院校
+  function addSummary(title,content,width,height) {
+	  
+		layer.open({
+			type : 2,
+			title:title,
+			area : [ width+'px', height+'px' ],
+			fixed : false, //不固定
+			maxmin : false,
+			content : content,
+		});
+	}
+
+  </script>
+</head>
+<body>
+
+
+<form class="layui-form">
+	<div class="layui-form-item">
+		<div class="layui-inline" style="margin-left: 10px;">
+			<input class="layui-btn" type="button" onclick="addSummary('新增','../Activity_Summary/add',670,450);" value="新增"/>
+		</div>
+		<div class="layui-inline" style="margin-left: 10px;">
+			<select id="summaryChoiceOperator">
+				<option value="">请选择讲师</option>
+			</select>
+		</div>
+		<div class="layui-inline" style="margin-left: 10px;">
+				<input type="text" class="layui-input" id="summaryChoiceDate" placeholder="请选择时间">
+		</div>
+		<div class="layui-inline">
+			<input type="button" class="layui-btn" data-type="reload" id="searchSummary" value="搜索">
+		</div>
+		
+	</div>
+</form>
+<table class="layui-hide" id="Summarytable" lay-filter="Summarytable"></table>
+
+<!-- <a class="layui-btn layui-btn-xs" lay-event="evaluation">新增测评</a> -->
+
+<script type="text/html" id="barSummary">
+	<a class="layui-btn layui-btn-xs" lay-event="edit">总结</a>
+	
+	<a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="json">查看详情</a>
+</script>
+
+</body>
+<script>
+layui.use(['table','layer','form','laydate'], function(){
+  var table = layui.table;
+  var layer=layui.layer;
+  var form = layui.form;
+  var laydate = layui.laydate;
+    table.render({
+    elem: '#Summarytable'
+    ,url:'../Activity_Summary/index_json'
+    ,height:389
+    ,id:'SummaryTable'
+    ,groups: 1 //只显示 1 个连续页码
+	,first: false //不显示首页
+	,last: false //不显示尾页
+	,page:{layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] }//自定义分页布局
+    ,cols: [[
+    	{field:'aname', title:'活动名称', width:300,align:'center',sort: true}
+    	,{field:'createdate', title:'日期', width:180,align:'center',sort: true}
+    	,{field:'summary', title:'总结', width:260,align:'center'}
+    	,{field:'oname', title:'操作员', width:150,align:'center',sort: true}
+      	,{fixed: 'right', title:'操作', toolbar: '#barSummary', width:200,align:'center'}
+    ]]
+  });
+    
+
+  //active
+  var $ = layui.$, active = {
+  	reload : function() {
+  		//执行重载
+  		table.reload('SummaryTable', { 
+  			where : {
+  				operatorselect : $("#summaryChoiceOperator").val(),
+  				dateselect : $("#summaryChoiceDate").val()
+  			}
+  		});
+  	}
+  };
+
+  //查询
+  $('#searchSummary').on('click', function() {
+  	var type = $(this).data('type');
+  	active[type] ? active[type].call(this) : '';
+  });
+  
+//监听事件
+  table.on('tool(Summarytable)', function(obj){
+	    var data = obj.data;
+	    if(obj.event === 'edit'){
+	    	
+	    	
+	    	layer.open({
+				type : 2,
+				title:'总结',
+				area : ['670px','430px' ],
+				fixed : false, //不固定
+				maxmin : false,
+				content : '../Activity_Summary/edit?id='+data.id
+			});
+	    }else if(obj.event==='json'){
+	    	layer.open({
+				type : 2,
+				title:'详情',
+				area : ['670px','425px' ],
+				fixed : false, //不固定
+				maxmin : false,
+				content : '../Activity_Summary/info_json?id='+data.id,
+			});
+	    }else if(obj.event==='evaluation'){
+	    	$.ajax({
+	    		url:'../Activity_Summary/evaluation',
+	    		type:'post',
+	    		data:{id:data.activity_id},
+	    		success:function(res){
+	    			if(res.status==1){
+	    				layer.msg("已完成！");
+	    			}else if(res.status==0){
+	    				layer.msg("");
+	    			}
+	    		}
+	    	});
+	    }
+	  });
+  
+//活动选择下拉框
+	$.post("../Activity_Summary/operator",function(result){
+	   	var operatorObj = result;
+	   	for(var i = 0;i < operatorObj.length;i++){
+	   		$("#summaryChoiceOperator").append("<option value="+operatorObj[i]['id']+">"+operatorObj[i]['name']+"</option>");
+	   	}
+	   	form.render('select');
+	  });
+//时间选择器
+	laydate.render({
+	    elem: '#summaryChoiceDate' //指定元素
+	  });
+});
+
+</script>
+
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet" href="../assets/layui/css/layui.css" />
+<link rel="stylesheet" href="../assets/font-awesome-4.7.0/css/font-awesome.min.css">
+<script src="../assets/layui/layui.js"></script>
+<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+</head>
+<body>
+
+
+	<div class="layui-form-item">
+		<div class="layui-inline" style="margin-top: 20px;">
+			<label class="layui-form-label">教学进度</label>
+			<div class="layui-input-block" style="width: 190px;">
+			<#if reportList??>
+        		<input type="text" class="layui-input tprogress" value="${reportList.tprogress}">
+			<#else>
+        		<input type="text" class="layui-input tprogress" value="">
+        	</#if>
+      		</div>
+		</div>
+		<div class="layui-inline" style="margin-top: 20px;">
+			<label class="layui-form-label">学生状况</label>
+			<div class="layui-input-block" style="width: 190px;">
+			<#if reportList??>
+        		<input type="text" class="layui-input sprogress" value="${reportList.sprogress}">
+        	<#else>
+        		<input type="text" class="layui-input sprogress" value="">
+        	</#if>
+      		</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline" style="margin-top: 20px;">
+			<label class="layui-form-label">市场状况</label>
+			<div class="layui-input-block" style="width: 190px;">
+		<#if reportList??>
+        <input type="text" class="layui-input cprogress" value="${reportList.cprogress}">
+        <#else>
+        <input type="text" class="layui-input cprogress" value="">
+        </#if>
+      </div>
+		</div>
+		<div class="layui-inline" style="margin-top: 20px;">
+			<label class="layui-form-label">备注</label>
+			<div class="layui-input-block" style="width: 190px;">
+		<#if reportList??>
+        <input type="text" class="layui-input comments" value="${reportList.comments}">
+        <#else>
+        <input type="text" class="layui-input comments" value="">
+        </#if>
+      </div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<i class="fa fa-plus i"
+			style="float: right; margin: 15px 30px 0px 0px" aria-hidden="true"></i>
+		<table class="layui-table tb"
+			style="width: 550px; text-align: center; margin-left: 50px;">
+			<thead>
+				<tr>
+					<th style="text-align: center;">学生</th>
+					<th style="text-align: center;">情况</th>
+					<th style="text-align: center;">操作</th>
+				</tr>
+			</thead>
+		</table>
+</div>
+
+	<div class="layui-form-item" style="text-align: center;">
+		<#if reportList??>
+		<button class="layui-btn" onclick="editReport();">立即提交</button>
+		<input type="hidden" class="reportid" value="${reportList.id}">
+	<#else>
+		<button class="layui-btn" onclick="addReport();">立即提交</button>
+		</#if>
+</div>
+</body>
+
+
+
+<script type="text/javascript">
+
+layui.use(['layer','table'],function(){
+	var layer=layui.layer,
+	table=layui.table;
+});
+
+//生成学生信息表单
+	for(var i=0;i<${reportList.json}.length;i++){
+		var obj=eval(${reportList.json}[i]);
+		$(".tb").append("<tr class='tr' myId="+obj.id+" name="+obj.name+" info="+obj.info+"><td>"+obj.name+"</td><td>"+obj.info+"</td><td><a style='display: inline;' href='#'>删除</a></td></tr>");
+	}
+//新增学生信息
+$(".i").click(function(){
+	layer.open({
+		  type: 2,
+		  area : [ '300px', '200px' ],
+		  title: false,
+		  closeBtn: 0,
+		  shadeClose: true,
+		  skin: 'yourclass',
+		  content: "info.html",
+		  success: function (layero, index) {
+				// 获取子页面的iframe
+				var iframe = window['layui-layer-iframe' + index];
+				// 向子页面的全局函数child传参
+				iframe.child(${reportList.id});
+			},
+	});
+ });
+
+//删除学生信息
+$("body").on("click","a",function(){
+	$(this).parents("tr").remove();
+});
+
+//保存
+function editReport(){
+	var o=$(".tr");
+	var arr=new Array();
+	o.each(function(){
+		var student=JSON.parse('{"name":"'+$(this).attr("name")+'","id":"'+$(this).attr("myId")+'","info": "'+$(this).attr("info")+'"}');
+		arr.push(student);
+	});
+	
+	var tprogress=$(".tprogress").val();
+	var sprogress=$(".sprogress").val();
+	var cprogress=$(".cprogress").val();
+	var comments=$(".comments").val();
+	var json=JSON.stringify(arr);
+	var id=$(".reportid").val();
+	
+		$.ajax({
+			url:'update',
+			type:'post',
+			data:{tprogress:tprogress,sprogress:sprogress,cprogress:cprogress,comments:comments,json:json,id:id},
+			success:function(res){
+				if(res.status==1){
+					var index=parent.layer.getFrameIndex(window.name);
+					parent.layer.close(index);
+					//parent.location.reload();
+				}else{
+					layer.msg('失败');
+				}
+			}
+		});
+}
+
+</script>
+</html>

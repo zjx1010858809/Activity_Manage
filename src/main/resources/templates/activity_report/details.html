@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet" href="../assets/layui/css/layui.css" />
+<script src="../assets/layui/layui.js"></script>
+<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+</head>
+<body>
+<div class="layui-form-item" style="margin-top: 30px;margin-left: -30px;">
+    
+    <div class="layui-inline" style="margin-top: 20px;">
+      <label class="layui-form-label">学校名</label>
+      <div class="layui-input-block" style="width: 190px;">
+        <input type="text" name="name" class="layui-input cname" value="">
+      </div>
+    </div>
+</div>
+<div class="layui-input-block">
+		<button class="layui-btn" onclick="addSchool();">立即提交</button>
+</div>
+ 
+</body>
+<script type="text/javascript">
+layui.use('layer',function(){
+	var layer=layui.layer;
+});
+//新增
+function addSchool(){
+	var name=$(".cname").val();
+	
+	if(name==""){
+		layer.msg('不能为空');
+	}else{
+		$.ajax({
+			url:'insert',
+			type:'post',
+			data:{name:name},
+			success:function(res){
+				if(res.status==1){
+					var index=parent.layer.getFrameIndex(window.name);
+					parent.layer.close(index);
+					parent.location.reload();
+				}else{
+					alert('失败');
+				}
+				
+			}
+		});
+	}
+}
+
+
+</script>
+
+</html>

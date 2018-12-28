@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet" href="../assets/layui/css/layui.css" />
+<link rel="stylesheet"
+	href="../assets/font-awesome-4.7.0/css/font-awesome.min.css">
+<script src="../assets/layui/layui.js"></script>
+<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+
+</head>
+<body>
+	<form class='layui-form'>
+		<br>
+		<select class="layui-unselect stu_name"></select> <br>
+		<input type='text' class='layui-input info' placeholder='状况' />
+	</form>
+	<br><br>
+	<div style="text-align: center"><button class="layui-btn confirm">确认</button></div>
+	
+</body>
+<script>
+function child(id){
+	layui.use(['form','layer'], function() {
+		var form = layui.form;
+		var layer = layui.layer;
+		
+		$.ajax({
+			url:'userlist',
+			data:{id:id},
+			type:'post',
+			success:function(data){
+				var stuObj = data;
+				for (var m = 0; m < stuObj.length; m++) {
+					$(".stu_name").append("<option value=" + stuObj[m]['id'] + ">" + stuObj[m]['name'] + "</option>");
+				}
+				form.render('select');
+			}
+		});
+		
+		$(".confirm").click(function(){
+			parent.$(".tb").append("<tr class='tr' myId='"+$(".stu_name").val()+"' name='"+$(".stu_name").find("option:selected").text()+"' info='"+$(".info").val()+"'><td>"+$(".stu_name").find("option:selected").text()+"</td><td>"+$(".info").val()+"</td><td><a style='display: inline;' href='#'>删除</a></td></tr>");
+			var index = parent.layer.getFrameIndex(window.name);
+			parent.layer.close(index);
+		})
+	});
+}
+</script>
+</html>

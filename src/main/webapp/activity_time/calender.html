@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href='../assets/fullcalendar/fullcalendar.css' rel='stylesheet' />
+<link href='../assets/fullcalendar/fullcalendar.print.css'
+	rel='stylesheet' media='print' />
+<script src='../assets/lib/jquery.min.js'></script>
+<script src='../assets/lib/jquery-ui.custom.min.js'></script>
+<script src='../assets/fullcalendar/fullcalendar.min.js'></script>
+<script>
+		$(document).ready(function () {
+			var canlenders = [];
+			var s;
+			
+			$.post(
+				'../Activity_Time/canlender',
+				function(data){
+					for(i=0;i<data.length;i++){
+						var canlender = new Object();
+						canlender.title = data[i].activity_name;
+						canlender.start = data[i].date;
+						canlenders.push(canlender);	
+					};
+					var date = new Date();
+					var d = date.getDate();
+					var m = date.getMonth();
+					var y = date.getFullYear(); 
+					$('#calendar').fullCalendar({
+						weekMode:'liquid',
+						height: '350',
+						editable: true,
+						events:canlenders,
+					});
+				},
+			)
+		});
+	</script>
+<style>
+body {
+	margin-top: 40px;
+	text-align: center;
+	font-size: 14px;
+	font-family: "Lucida Grande", Helvetica, Arial, Verdana, sans-serif;
+}
+
+#calendar {
+	width: 700px;
+	margin: 0 auto;
+}
+</style>
+</head>
+<body>
+	<div id='calendar'></div>
+</body>
+</html>

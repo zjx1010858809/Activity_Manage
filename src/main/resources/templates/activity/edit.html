@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet" href="../assets/layui/css/layui.css" />
+<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript" src="../assets/layui/layui.js"></script>
+</head>
+
+<body>
+	<div class="layui-tab layui-tab-card">
+		<ul class="layui-tab-title">
+			<li class="layui-this">基本</li>
+			<li>组织</li>
+			<li>注意事项</li>
+		</ul>
+		<div class="layui-tab-content" style="height: 320px;">
+			<div class="layui-tab-item tab1 layui-show">
+				<form class="layui-form" style="margin-top: 15px">
+					<div class="layui-form-item">
+						<label class="layui-form-label">活动名称：</label>
+						<div class="layui-input-inline">
+							<input type="text" class="layui-input name"
+								value=${activity.name}>
+						</div>
+						<label class="layui-form-label">课程信息：</label>
+						<div class="layui-input-inline">
+							<input type="text" class="layui-input courseInfo"
+								value=${activity.courseinfo}>
+						</div>
+						<label class="layui-form-label">时间安排：</label>
+						<div class="layui-input-inline">
+							<input id="acStartDate" type="text" class="layui-input dateInfo"
+								value=${activity.dateinfo}>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">负责人：</label>
+						<div class="layui-input-inline">
+							<select class="layui-unselect operator">
+								<option value="0">-</option>
+							</select>
+						</div>
+						<label class="layui-form-label">活动类型：</label>
+						<div class="layui-input-inline">
+							<select class="layui-unselect type" lay-filter="">
+								<option value="0">实训</option>
+								<option value="1">宣讲</option>
+								<option value="2">比赛</option>
+							</select>
+						</div>
+					</div>
+					<label class="layui-form-label">计划安排：</label>
+					<div class="layui-input-block" style="width: 450px">
+						<textarea name="" class="layui-textarea planinfo"
+							style="height: 150px"></textarea>
+					</div>
+				</form>
+			</div>
+			<div class="layui-tab-item tab2">
+				<form class="layui-form" style="margin-top: 15px">
+					<div class="layui-form-item">
+						<label class="layui-form-label">来源人：</label>
+						<div class="layui-input-inline">
+							<select class="layui-unselect source_operator">
+								<option value="0">-</option>
+							</select>
+						</div>
+						<label class="layui-form-label">辅导员：</label>
+						<div class="layui-input-inline">
+							<select class="layui-unselect Instructor_user">
+								<option value="0">-</option>
+							</select>
+						</div>
+						<label class="layui-form-label">参与学校：</label>
+						<div class="layui-input-inline">
+							<input type="text" class="layui-input school"
+								value="${activity.school}">
+						</div>
+					</div>
+					<label class="layui-form-label">备注：</label>
+					<div class="layui-input-block" style="width: 450px">
+						<textarea name="" class="layui-textarea comments"
+							style="height: 150px">${activity.comments}</textarea>
+					</div>
+				</form>
+			</div>
+			<div class="layui-tab-item tab3">
+				<form class="layui-form" style="margin-top: 15px">
+					<label class="layui-form-label">注意事项：</label>
+					<div class="layui-input-block" style="width: 450px">
+						<textarea class="layui-textarea attention" style="height: 150px">${activity.attention}</textarea>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-input-inline"
+			style="float: right; text-align: right">
+			<input class="layui-btn edit" type="button" value="确定">
+		</div>
+	</div>
+</body>
+<script>
+	layui.use('layer', function () {
+		var layer = layui.layer;
+	});
+
+	layui.use(['form', 'element'], function () {
+		var form = layui.form;
+		var element = layui.element;
+		//负责人
+		$.post("../Activity_Time/Operators", function (result) {
+			var operatorObj = result;
+			for (var m = 0; m < operatorObj.length; m++) {
+				if(operatorObj[m]['id'] == ${activity.operator_id}){
+					$(".operator").append("<option value=" + operatorObj[m]['id'] + " selected='selected'>" + operatorObj[m]['name'] + "</option>");
+				}else{
+					$(".operator").append("<option value=" + operatorObj[m]['id'] + ">" + operatorObj[m]['name'] + "</option>");
+				}
+				if(operatorObj[m]['id'] == ${activity.source_operator_id}){
+					$(".source_operator").append("<option value=" + operatorObj[m]['id'] + " selected='selected'>" + operatorObj[m]['name'] + "</option>");
+				}else{
+					$(".source_operator").append("<option value=" + operatorObj[m]['id'] + ">" + operatorObj[m]['name'] + "</option>");
+				}
+				/* 此处为辅导员自动填充 */
+				/* if(operatorObj[m]['id'] == ${activity.Instructor_user_id}){
+					$(".Instructor_user").append("<option value=" + operatorObj[m]['id'] + " selected='selected'>" + operatorObj[m]['name'] + "</option>");
+				}else{
+					$(".Instructor_user").append("<option value=" + operatorObj[m]['id'] + ">" + operatorObj[m]['name'] + "</option>");
+				} */
+			}
+			form.render('select');
+		});
+		$(".edit").click(function () {
+			$.post(
+				'',
+				{
+					//课程信息
+					courseinfo: $(".courseInfo").val(),
+					//计划信息
+					planinfo: $(".planInfo").val(),
+					//时间信息
+					dateinfo: $(".dateInfo").val(),
+					//参与学校
+					school: $(".school").val(),
+					//活动名	
+					name: $(".name").val(),
+					//来源人	
+					source_operator_id: $(".source_operator").val(),
+					//注意事项
+					attention: $(".attention").val(),
+					//活动类型	
+					type: $(".type").val(),
+					//辅导员id
+					Instructor_user_id: $(".Instructor_user").val(),
+					//负责人	
+					operator_id: $(".operator").val(),
+					//备注
+					comments: $(".comments").val(),
+					//最后修改人		
+					charge_operator_id: 0,
+				},
+				function (data) {
+//					alert(data.url);
+					var index = parent.layer.getFrameIndex(window.name);
+					parent.layer.close(index);
+				} ,
+			)
+		});
+	});
+</script>
+
+</html>

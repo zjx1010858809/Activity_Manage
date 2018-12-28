@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="../assets/layui/css/layui.css" />
+	<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+	<script type="text/javascript" src="../assets/layui/layui.js"></script>
+</head>
+
+<body>
+	<!-- <form class="layui-form">
+		<div class="layui-form-item" style="margin-top:15px;margin-left:20px">
+			<div class="layui-input-inline type query">
+				<select class="typeSelect layui-unselect" lay-filter="type">
+					<option value="0" selected='selected'>实训</option>
+					<option value="1">宣讲</option>
+					<option value="2">比赛</option>
+				</select>
+			</div>
+			<div class="layui-input-inline type query">
+				<select class="activitySelect layui-unselect" lay-filter="activity">
+				</select>
+			</div>
+		</div>
+	</form> -->
+	<table id="feedBackTable" class="layui-hide" lay-filter="feedBackFilter"></table>
+</body>
+<script>
+	layui.use(['table', 'form'], function () {
+		 $.extend({
+             getUrlVars: function () {
+                 var vars = [], hash;
+                 var hashes = window.location.href.slice(
+                     window.location.href.indexOf('?') + 1).split('&');
+                 for (var i = 0; i < hashes.length; i++) {
+                     hash = hashes[i].split('=');
+                     vars.push(hash[0]);
+                     vars[hash[0]] = hash[1];
+                 }
+                 return vars;
+             },
+             getUrlVar: function (name) {
+                 return $.getUrlVars()[name];
+             }
+         });
+		
+		var form = layui.form;
+		var table = layui.table;
+		//form
+		/* $.post(
+				"../FeedBack/activity", 
+				{type : $(".typeSelect").val()},
+				function (result) {
+					var activityObj = result;
+					for (var i = 0; i < activityObj.length; i++) {
+						$(".activitySelect").append("<option value=" + activityObj[i]['id'] + ">" + activityObj[i]['name'] + "</option>");
+					}
+				form.render('select');
+		});
+		
+		//select_type
+		form.on('select(type)', function (data) {
+			$.post(
+					"../FeedBack/activity", 
+					{type : $(".typeSelect").val()},
+					function (result) {
+						var activityObj = result;
+						$(".activitySelect").html("");
+						for (var i = 0; i < activityObj.length; i++) {
+							$(".activitySelect").append("<option value=" + activityObj[i]['id'] + ">" + activityObj[i]['name'] + "</option>");
+						}
+					form.render('select');
+			});
+		});
+		
+		//select_activity
+		form.on('select(activity)', function (data) {
+			table.reload('feedBackTable', {
+				where: {
+					activity_id: $(".activitySelect").val(),
+				}
+			});
+		}); */
+		
+		//table
+		table.render({
+			elem: '#feedBackTable',
+			url: '../FeedBack/info?activity_time_id='+$.getUrlVar("id") //数据接口
+			, id: 'feedBackTable'
+			, page: {
+				layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'], //自定义分页布局
+				groups: 1,//只显示 1 个连续页码
+				first: false, //不显示首页
+				last: false, //不显示尾页
+			}
+			, cols: [[
+				{ field: 'user_name', title: '学生姓名', width: 120, align: 'center' },
+				{ field: 'opt1', title: '1', align: 'center' },
+				{ field: 'opt2', title: '2', align: 'center' },
+				{ field: 'opt3', title: '3', align: 'center' },
+				{ field: 'opt4', title: '4', align: 'center' },
+				{ field: 'opt5', title: '5', align: 'center' },
+				{ field: 'opt6', title: '6', align: 'center' },
+				{ field: 'result', title: '回应', align: 'center',width:120 },
+				{ fixed: 'right', title: '操作', width: 120, align: 'center', toolbar: '#feedBackBar'}
+			]]
+		});
+		
+		table.on('tool(feedBackFilter)', function (obj) {
+			var data = obj.data;
+			if (obj.event === 'hidden') {
+				layer.confirm('是否隐藏？', {
+				  btn: ['是','否'] //按钮
+				}, function(){
+					$.post(
+						'../FeedBack/status',
+						{
+							id : data.id,
+							status : 1,
+						},function(data){
+							if(data==0){
+								layer.msg('隐藏成功', {icon: 1});
+								table.reload('feedBackTable', {
+								});
+							}else{
+								layer.msg('隐藏失败', {icon: 2});
+							}
+						}
+					)
+				}, function(){
+				 
+				});
+			}else if(obj.event === 'display'){
+				layer.confirm('是否显示？', {
+					  btn: ['是','否'] //按钮
+					}, function(){
+						$.post(
+								'../FeedBack/status',
+								{
+									id : data.id,
+									status : 0,
+								},function(data){
+									if(data==0){
+										layer.msg('显示成功', {icon: 1});
+										table.reload('feedBackTable', {
+										});
+									}else{
+										layer.msg('显示失败', {icon: 2});
+									}
+								}
+							)
+					}, function(){
+					 
+					});
+			}else if(obj.event === 'response'){
+				layer.open({
+					title: '教师回应',
+					type: 2,
+					area: ['500px', '300px'], //宽高
+					maxmin: true, //开启最大化最小化按钮
+					content: "../activity_feedback/response.html",
+					success: function (layero, index) {
+						// 获取子页面的iframe
+						var iframe = window['layui-layer-iframe' + index];
+						// 向子页面的全局函数child传参
+						iframe.child(data.id);
+					},
+					end: function (index) {
+						table.reload('feedBackTable', {
+							where: {
+							}
+						});
+					}
+				});
+			}
+		})
+	});
+</script>
+<script type="text/html" id="feedBackBar">
+ 		{{#  if(d.status === 0){ }}
+    		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="hidden">隐藏</a> 
+			<a class="layui-btn layui-btn-xs" lay-event="response">回应</a> 	
+  		{{#  } else if(d.status === 1) { }}
+    		<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="display">显示</a> 
+			<a class="layui-btn layui-btn-xs" lay-event="response">回应</a> 	
+		{{# } }}  
+</script>
+</html>

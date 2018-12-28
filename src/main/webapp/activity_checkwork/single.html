@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet" href="../assets/layui/css/layui.css" />
+<link rel="stylesheet"
+	href="../assets/font-awesome-4.7.0/css/font-awesome.min.css">
+<script src="../assets/layui/layui.js"></script>
+<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+
+</head>
+<body>
+		<br>
+		<select class="layui-unselect check_name" style="width: 80px;height:30px; margin-left: 10px;">
+			<option value="0">-</option>
+			<option value="1">正常</option>
+			<option value="2">迟到</option>
+			<option value="3">早退</option>
+			<option value="4">请假</option>
+			<option value="5">未到</option>
+		</select>
+	<button class="layui-btn confirm" style="margin-left: 10px;">确认</button></div>
+	
+</body>
+<script>
+function child(check,ids){
+	layui.use(['form','layer'], function() {
+		var form = layui.form;
+		var layer = layui.layer;
+		
+		$(".confirm").click(function(){
+			
+			$.ajax({
+				url:'../Activity_CheckWork/updatecheck',
+				data:{ids:ids,check:check,status:$(".check_name").val()},
+				type:'post',
+				success:function(){
+					var index = parent.layer.getFrameIndex(window.name);
+					parent.layer.close(index);
+				}
+			});
+		});
+	});
+}
+</script>
+</html>

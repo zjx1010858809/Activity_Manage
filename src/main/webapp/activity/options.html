@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <link rel="stylesheet" href="../assets/layui/css/layui.css" />
+    <script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+    <script type="text/javascript" src="../assets/layui/layui.js"></script>
+</head>
+
+<body>
+    <form class="layui-form" style="margin-top: 15px">
+        <div class="layui-form-item">
+            <label class="layui-form-label">设备安排：</label>
+            <div class="layui-input-inline" style="margin-top: 16px; width: 360px; margin-top: 0">
+                <input type="checkbox" class="Projector" lay-filter="Projector" title="投影">
+                <input type="checkbox" class="Microphone" lay-filter="Microphone" title="话筒">
+                <input type="checkbox" class="Insert" lay-filter="Insert" title="插排">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-inline" style="float: right;text-align: right">
+                <input class="layui-btn confirm" type="button" value="确定">
+            </div>
+        </div>
+    </form>
+</body>
+<script>
+
+    function child(id) {
+        layui.use('form', function () {
+            var form = layui.form;
+            var options = [];
+            var projector;
+            var microphone;
+            var insert;
+            $.post(
+                '../Activity/Optioins?id=' + id,
+                function (data) {
+                    options = data.split("");
+                    for (i = 0; i < options.length; i++) {
+                        if (options[i] == 1) {
+                            $("input[type='checkbox']").eq(i).attr("checked", "");
+                        }
+                    }
+                    projector = options[0];
+                    microphone = options[1];
+                    insert = options[2];
+                    layui.form.render();
+                }
+            )
+
+            $(".confirm").click(function () {
+                $.post(
+                    '../Activity/setOptioins',
+                    {
+                        options: getOption(),
+                        id: id,
+                    },
+                    function (data) {
+                        if (data.status == 0) {
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(index);
+                        } else {
+                            alert("修改异常");
+                        }
+                    }
+                )
+            })
+            //获取options
+            form.on('checkbox(Projector)', function (data) {
+                if (data.elem.checked) {
+                    projector = "1";
+                } else {
+                    projector = "0";
+                }
+            });
+            form.on('checkbox(Microphone)', function (data) {
+                if (data.elem.checked) {
+                    microphone = "1";
+                } else {
+                    microphone = "0";
+                }
+            });
+            form.on('checkbox(Insert)', function (data) {
+                if (data.elem.checked) {
+                    insert = "1";
+                } else {
+                    insert = "0";
+                }
+            });
+            function getOption() {
+
+                return projector + microphone + insert;
+            }
+        });
+    }
+</script>
+
+</html>
