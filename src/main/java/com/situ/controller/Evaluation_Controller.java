@@ -34,8 +34,6 @@ public class Evaluation_Controller {
 		String whereSize = "";
 		String where;
 		
-		System.out.println("a_id:"+activity_id);
-
 		//学生测评表生成判断
 		if (activity_id != null) {
 			info.setWhere("where id = " + activity_id);
@@ -63,7 +61,6 @@ public class Evaluation_Controller {
 		
 		// data
 		where = info.getWhere();
-		System.out.println("where:----"+where);
 		list = (ArrayList<Evaluation>) eservice.index(info);
 
 		// count

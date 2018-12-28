@@ -11,11 +11,15 @@ import org.springframework.stereotype.Repository;
 import com.situ.entity.Activity;
 import com.situ.entity.Evaluation;
 import com.situ.entity.Operator;
+import com.situ.utils.CheckWorkSearchInfo;
 import com.situ.utils.EvaluationSearchInfo;
 import com.situ.utils.SearchInfo;
 
 @Repository
 public interface Evaluation_Mapper {
+	
+	@Select("select ae.*,au.name auname,a.name aname from activity_evaluation ae inner join activity_user au inner join activity a on ae.user_id=au.id and ae.activity_id=a.id ${where} ${limits} ")
+	public List<Evaluation> selectsingle(CheckWorkSearchInfo info);
 	
 	@Select("select ae.*,au.name auname,a.name aname from activity_evaluation ae inner join activity_user au inner join activity a on ae.user_id=au.id and ae.activity_id=a.id ${where} ${limits} ")
 	public List<Evaluation> index(SearchInfo info);

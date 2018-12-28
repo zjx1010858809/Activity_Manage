@@ -18,7 +18,7 @@ public interface Market_Service {
 	
 	public void delete(int id);
 	
-	public void update(Market r);
+	public void update(Market m);
 	
 	public Market getbyid(int id);
 	

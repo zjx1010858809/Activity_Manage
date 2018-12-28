@@ -4,8 +4,7 @@
 <meta charset="UTF-8">
 <title></title>
 <link rel="stylesheet" href="../assets/layui/css/layui.css" />
-<link rel="stylesheet"
-	href="../assets/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="../assets/font-awesome-4.7.0/css/font-awesome.min.css">
 <script src="../assets/layui/layui.js"></script>
 <script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
 </head>
@@ -16,22 +15,22 @@
 		<div class="layui-inline" style="margin-top: 20px;">
 			<label class="layui-form-label">教学进度</label>
 			<div class="layui-input-block" style="width: 190px;">
-		<#if reportList??>
-        <input type="text" class="layui-input tprogress" value="${reportList.tprogress}">
-        <#else>
-        <input type="text" class="layui-input tprogress" value="">
-        </#if>
-      </div>
+			<#if reportList??>
+        		<input type="text" class="layui-input tprogress" value="${reportList.tprogress}">
+			<#else>
+        		<input type="text" class="layui-input tprogress" value="">
+        	</#if>
+      		</div>
 		</div>
 		<div class="layui-inline" style="margin-top: 20px;">
 			<label class="layui-form-label">学生状况</label>
 			<div class="layui-input-block" style="width: 190px;">
-		<#if reportList??>
-        <input type="text" class="layui-input sprogress" value="${reportList.sprogress}">
-        <#else>
-        <input type="text" class="layui-input sprogress" value="">
-        </#if>
-      </div>
+			<#if reportList??>
+        		<input type="text" class="layui-input sprogress" value="${reportList.sprogress}">
+        	<#else>
+        		<input type="text" class="layui-input sprogress" value="">
+        	</#if>
+      		</div>
 		</div>
 	</div>
 	<div class="layui-form-item">
@@ -69,9 +68,7 @@
 				</tr>
 			</thead>
 		</table>
-
-
-	</div>
+</div>
 
 	<div class="layui-form-item" style="text-align: center;">
 		<#if reportList??>
@@ -114,7 +111,7 @@ $(".i").click(function(){
 				iframe.child(${reportList.id});
 			},
 	});
- })
+ });
 
 //删除学生信息
 $("body").on("click","a",function(){

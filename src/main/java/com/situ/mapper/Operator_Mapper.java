@@ -23,11 +23,11 @@ public interface Operator_Mapper {
 	public List<Operator> selectSize(SearchInfo info);
 	
 	//添加管理员
-	@Insert("insert into activity_operator(nike,pass,name,type,tel,power,status,comments) values(#{nike},#{pass},#{name},#{type},#{tel},#{power},#{status},#{comments})")
+	@Insert("insert into activity_operator(nike,pass,name,type,tel,power,status,comments) values(#{nike},'3032B963A259075B964B07153D3C4B70',#{name},#{type},#{tel},#{power},#{status},#{comments})")
 	public int insert(Operator o);
 	
 	//重置密码
-	@Update("update activity_operator set pass='123' where id=#{id}")
+	@Update("update activity_operator set pass='3032B963A259075B964B07153D3C4B70' where id=#{id}")
 	public void updatePass(int id);
 	
 	//修改管理员信息

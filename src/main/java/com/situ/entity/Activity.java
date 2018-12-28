@@ -169,13 +169,13 @@ public class Activity {
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
-	
-	public Integer getInstructor_user_id() {
+
+	public int getInstructor_user_id() {
 		return Instructor_user_id;
 	}
 
-	public void setInstructor_user_id(Integer instructor_user_id) {
-		this.Instructor_user_id = instructor_user_id;
+	public void setInstructor_user_id(int instructor_user_id) {
+		Instructor_user_id = instructor_user_id;
 	}
 
 	public Integer getOperator_id() {

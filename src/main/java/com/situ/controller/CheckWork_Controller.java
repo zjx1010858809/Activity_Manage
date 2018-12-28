@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,9 +16,12 @@ import org.springframework.web.servlet.ModelAndView;
 import com.situ.entity.Activity;
 import com.situ.entity.Activity_Time;
 import com.situ.entity.Checkwork;
+import com.situ.entity.Evaluation;
+import com.situ.entity.Login;
 import com.situ.service.Activity_Service;
 import com.situ.service.Activity_Time_Service;
 import com.situ.service.CheckWork_Service;
+import com.situ.service.Evaluation_Service;
 import com.situ.utils.ActivitySearchInfo;
 import com.situ.utils.CheckWorkSearchInfo;
 import com.situ.utils.JsonInfo;
@@ -29,6 +34,8 @@ public class CheckWork_Controller {
 	Activity_Service aservice;
 	@Autowired
 	Activity_Time_Service atservice;
+	@Autowired
+	Evaluation_Service eservice;
 	
 	
 	
@@ -41,26 +48,6 @@ public class CheckWork_Controller {
 				mv.setViewName("activity_checkwork/edit");
 				return mv;
 			}
-	
-	//进入考勤页面
-		@RequestMapping("checkwork_json")
-		@ResponseBody
-		public HashMap<String, Object> checkwork(String date,CheckWorkSearchInfo info) throws Exception {
-			HashMap<String, Object> m = new HashMap<String, Object>();
-			ArrayList<Checkwork> list = new ArrayList<Checkwork>();
-			
-			info.setWhere(" where date='"+date+"'");
-			
-			//查询
-			list = (ArrayList<Checkwork>) cservice.select(info);
-			int count = cservice.getcount(info);
-			m.put("data", list);
-			m.put("count", count);
-			m.put("msg", "");
-			m.put("code", 0);
-			return m;
-		}
-		
 	
 	//json自动填充数据
 	@RequestMapping("index_json")
@@ -92,25 +79,67 @@ public class CheckWork_Controller {
 		return m;
 	}
 	
+	//json自动填充个人数据
+	@RequestMapping("singleindex_json")
+	@ResponseBody
+	public HashMap<String, Object> selectsingle(CheckWorkSearchInfo info,HttpSession session) throws Exception {
+		HashMap<String, Object> m = new HashMap<String, Object>();
+		ArrayList<Checkwork> list = new ArrayList<Checkwork>();
+		
+		Login user=(Login) session.getAttribute("registers");
+		
+		//获取条件
+		Integer activityselect=info.getActivityselect();
+		
+		//拼接where
+		if(activityselect==null) {
+			info.setWhere(" where ack.activity_id=(select max(activity_id) from activity_evaluation where user_id="+user.getId()+") and ack.user_id="+user.getId()+" ");
+		}else if(activityselect!=null){
+			info.setWhere(" where ack.activity_id="+activityselect+" and ack.user_id="+user.getId()+" ");
+		}
+		
+		//查询
+		list = (ArrayList<Checkwork>) cservice.select(info);
+		int count = cservice.getcount(info);
+		m.put("data", list);
+		m.put("count", count);
+		m.put("msg", "");
+		m.put("code", 0);
+		return m;
+	}
+	
 	//json自动填充活动
 	@RequestMapping("activity")
 	@ResponseBody
-	public List<Activity> school(ActivitySearchInfo info) throws Exception {
+	public List<Activity> activity(ActivitySearchInfo info) throws Exception {
 		info.setWhere(" order by a.id desc ");
 		
 		return aservice.selectAll(info);
 	}
 	
+	//json自动填充个人活动
+	@RequestMapping("singleactivity")
+	@ResponseBody
+	public List<Evaluation> singleactivity(CheckWorkSearchInfo info,HttpSession session) throws Exception {
+		Login user=(Login) session.getAttribute("registers");
+		
+		info.setWhere(" where ae.user_id="+user.getId()+" group by ae.activity_id order by ae.activity_id desc ");
+		
+		return eservice.selectsingle(info);
+	}
+	
 	//json自动填充时间
 	@RequestMapping("date")
 	@ResponseBody
-	public List<Activity_Time> date(ActivitySearchInfo info,Integer activity_id) throws Exception {
+	public List<Checkwork> date(CheckWorkSearchInfo info,Integer activity_id) throws Exception {
 		if(activity_id==null) {
-			info.setWhere(" where at.activity_id=(select max(id) from activity) ");
-			return atservice.selectAll(info);
+			
+			info.setWhere(" where activity_id=(select max(activity_id) from activity_checkwork group by activity_id) group by date ");
+			return cservice.selectDate(info);
 		}else {
-			info.setWhere(" where at.activity_id="+activity_id+" ");
-			return atservice.selectAll(info);
+			
+			info.setWhere(" where activity_id="+activity_id+" group by date ");
+			return cservice.selectDate(info);
 		}
 	}
 	
@@ -137,7 +166,7 @@ public class CheckWork_Controller {
 		return new JsonInfo(1,"");
 	}
 
-//循环遍历
+//循环遍历--生成考勤表
 	@RequestMapping("add")
 	@ResponseBody
 	public JsonInfo addcheck(Integer id,CheckWorkSearchInfo info) {

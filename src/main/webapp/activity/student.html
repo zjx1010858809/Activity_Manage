@@ -7,6 +7,10 @@
 </head>
 
 <body>
+	<div>
+        <button class="layui-btn addStu" style="margin-left:5px;margin-top:15px;margin-bottom:15px;float:left">新增学生</button>
+    </div>
+    <hr>
     <div>
         <select xm-select="student" xm-select-show-count="5" class="student" lay-search xm-select-search>
         </select>
@@ -156,6 +160,19 @@
                         });
                     }
                 )
+            })
+            $(".addStu").click(function(){
+            	layer.open({
+					title: '新增学生',
+					type: 2,
+					area: ['700px', '400px'], //宽高
+					maxmin: false, //开启最大化最小化按钮
+					content: "../users/userInsert.html",
+					end : function(){
+						table.reload('studentTable', {
+                        });
+					}
+				});
             })
         });
 

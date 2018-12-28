@@ -14,8 +14,8 @@ import com.situ.utils.CheckWorkSearchInfo;
 @Repository
 public interface CheckWork_Mapper {
 	
-	@Select("select * from activity_checkwork where activity_id=#{activity_id} order by date desc")
-	public List<Checkwork> selectDate(int activity_id);
+	@Select("select * from activity_checkwork ${where} order by date desc")
+	public List<Checkwork> selectDate(CheckWorkSearchInfo info);
 	
 	@Select("select ack.*,au.name uname,ao.name oname from activity_checkwork ack inner join  activity_user au inner join activity_operator ao on ack.user_id=au.id and ack.operator_id=ao.id ${where} order by ack.id asc ${limits}")
 	public List<Checkwork> select(CheckWorkSearchInfo info);

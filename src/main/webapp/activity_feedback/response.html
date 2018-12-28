@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet" href="../assets/layui/css/layui.css" />
+<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript" src="../assets/layui/layui.js"></script>
+</head>
+<body>
+	<form class="layui-form">
+		<div class="layui-form-item" style="margin-top:15px;margin-left:20px">
+			<label class="layui-form-label" style="padding-left:0">教师回应：</label>
+			<div class="layui-input-block" style="width: 350px">
+				<textarea class="layui-textarea result" style="height: 150px"></textarea>
+			</div>
+		</div>
+	</form>
+	<div class="layui-input-inline" style="float: right;text-align: right;margin-right:18px">
+		<input class="layui-btn response" type="button" value="确定">
+	</div>
+</body>
+<script>
+function child(id) {
+	$.post(
+		'../FeedBack/ById',
+		{id:id},
+		function(data){
+			$(".result").val(data.result);
+		}
+	)
+	
+	$(".response").click(function(){
+		$.post(
+			'../FeedBack/result',
+			{
+				id : id,
+				result : $(".result").val(),
+			},
+			function(data){
+				var index = parent.layer.getFrameIndex(window.name);
+				parent.layer.close(index);
+			}
+		)
+	})
+}
+</script>
+</html>

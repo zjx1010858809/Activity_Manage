@@ -19,7 +19,7 @@ public interface Activity_Mapper {
 	@Select("select count(a.id) count from activity a")
 	public int selectSize(ActivitySearchInfo info);
 	
-	@Select("select id,name,type,status from activity WHERE DATE_SUB(CURDATE(), INTERVAL 30 DAY) <= createdate order by id desc")
+	@Select("select id,name,type,status from activity WHERE DATE_SUB(CURDATE(), INTERVAL 60 DAY) <= createdate order by id desc")
 	public List<Activity> selectInSeven();
 	
 	@Select("select id,name from activity_user where type = 0 ${where}")

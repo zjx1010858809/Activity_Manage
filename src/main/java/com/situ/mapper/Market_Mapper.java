@@ -15,7 +15,7 @@ import com.situ.utils.CheckWorkSearchInfo;
 @Repository
 public interface Market_Mapper {
 	
-	@Select("select * from activity")
+	@Select("select * from activity order by id desc")
 	public List<Activity> selectActivity();
 	
 	@Select("select * from activity_market where activity_id=#{activity_id}")
@@ -30,7 +30,7 @@ public interface Market_Mapper {
 	@Delete("delete from activity_market where id=#{id}")
 	public void delete(int id);
 	
-	@Update("update activity_market set operator_id=#{operator_id},info=#{info},comments=#{comments} where id=#{id}")
+	@Update("update activity_market set operator_id=#{operator_id},info=#{info},comments=#{comments},json=#{json} where id=#{id}")
 	public void update(Market r);
 	
 	@Select("select * from activity_market where id=#{id}")

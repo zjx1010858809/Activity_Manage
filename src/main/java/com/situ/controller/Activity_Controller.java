@@ -16,6 +16,7 @@ import com.situ.entity.School;
 import com.situ.entity.User;
 import com.situ.service.Activity_Service;
 import com.situ.service.College_Service;
+import com.situ.service.FeedBack_Service;
 import com.situ.service.School_Service;
 import com.situ.utils.ActivitySearchInfo;
 import com.situ.utils.JsonInfo;
@@ -32,6 +33,9 @@ public class Activity_Controller {
 
 	@Autowired
 	College_Service college_service;
+
+	@Autowired
+	FeedBack_Service feedBack_service;
 
 	@RequestMapping("index")
 	@ResponseBody
@@ -154,21 +158,38 @@ public class Activity_Controller {
 
 	@RequestMapping("addStudent")
 	@ResponseBody
-	public JsonInfo addStudents(Activity activity) {
+	public Integer addStudents(Activity activity) {
 		int i = service.addStudents(activity);
-		if (i > 0) {
-			return new JsonInfo(0, "增加成功");
-		} else {
-			return new JsonInfo(1, "增加异常");
-		}
+//		if (i > 0) {
+//			// 每个参与活动的学生生成一张效果反馈表
+//			FeedBack feedBack = new FeedBack();
+//			FeedBack fexit = new FeedBack();
+//			feedBack.setActivity_id(activity.getId());
+//			String ids = activity.getUser_ids();
+//			if (ids.length() > 0) {
+//				String user_id[] = ids.split(",");
+//				// 判断每个学生是否有学生反馈
+//				for (int j = 0; j < user_id.length; j++) {
+//					feedBack.setUser_id(Integer.valueOf(user_id[j]));
+//					fexit = feedBack_service.ifExit(feedBack);
+//					if (fexit == null) {
+//						int m = feedBack_service.insert(feedBack);
+//					} 
+//				}
+//			}
+//			return 0;
+//		} else {
+//			return 1;
+//		}
+		return i;
 	}
-	
+
 	@RequestMapping("Optioins")
 	@ResponseBody
 	public String option(int id) {
 		return service.getOption(id);
 	}
-	
+
 	@RequestMapping("setOptioins")
 	@ResponseBody
 	public JsonInfo setOptioins(Activity activity) {
@@ -179,13 +200,13 @@ public class Activity_Controller {
 			return new JsonInfo(1, "增加异常");
 		}
 	}
-	
+
 	@RequestMapping("edit")
 	@ResponseBody
-	public ModelAndView edit(int id,ActivitySearchInfo info) {
+	public ModelAndView edit(int id, ActivitySearchInfo info) {
 		info.setWhere("where a.id = " + id);
 		ModelAndView mv = new ModelAndView();
-		mv.addObject("activity",service.selectAll(info).get(0));
+		mv.addObject("activity", service.selectAll(info).get(0));
 		mv.setViewName("activity/edit");
 		return mv;
 	}

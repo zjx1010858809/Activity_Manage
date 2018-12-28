@@ -10,10 +10,10 @@ import com.situ.entity.Login;
 public interface login_mapper {
 	
 	
-	@Select("select * from activity_user where nike=#{nike} and pass=#{pass}")
+	@Select("select * from activity_user where nike=#{nike} and pass=#{md5pass}")
 	public Login userLogin(Login log);
 	
-	@Select("select * from activity_operator where nike=#{nike} and pass=#{pass}")
+	@Select("select * from activity_operator where nike=#{nike} and pass=#{md5pass}")
 	public Login operLogin(Login log);
 	
 }

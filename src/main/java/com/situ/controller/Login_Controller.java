@@ -12,21 +12,21 @@ import com.situ.service.login_service;
 import com.situ.utils.JsonInfo;
 
 @Controller
-public class login_controller {
+public class Login_Controller {
 
 	@Autowired
 	login_service lservice;
 
 	@RequestMapping("logins")
 	public @ResponseBody JsonInfo login(Login log, String code, HttpSession session) {
-
+		System.out.println(log.getMd5pass());
 		int myid = log.getMyid();
 		if (session.getAttribute("randomCode").toString().equalsIgnoreCase(code)) {
 			if (myid == 0) {
-
 				Login user = lservice.userLogin(log);
 				if (user != null) {
 					session.setMaxInactiveInterval(100000000);
+					session.setAttribute("myid",0);
 					session.setAttribute("registers", user);
 					int type = user.getType();
 					if (type == 0) {
@@ -43,6 +43,7 @@ public class login_controller {
 				Login oper = lservice.operLogin(log);
 				if (oper != null) {
 					session.setMaxInactiveInterval(100000000);
+					session.setAttribute("myid",1);
 					session.setAttribute("registers", oper);
 					int type = oper.getType();
 					if (type == 0) {
@@ -64,6 +65,20 @@ public class login_controller {
 	public String signOut(HttpSession session) {
 		session.removeAttribute("registers");
 		return "redirect:login.html";
+	}
+	
+	@RequestMapping("sessionCode")
+	@ResponseBody
+	public Integer sessionCode(HttpSession session) {
+		Integer myid = (Integer) session.getAttribute("myid");
+		if(myid == 1) {
+			return 1;
+		}else if(myid == 0) {
+			return 1;
+		}else {
+			//signOut(session);
+			return -1;
+		}
 	}
 	
 }

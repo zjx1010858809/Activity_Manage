@@ -21,7 +21,7 @@ public interface UserGroup_Mapper {
 	@Select("select au.*,ao.name oname from activity_usergroup au inner join activity_operator ao on au.operator_id=ao.id ${where} order by au.id desc ${limits}")
 	public List<UserGroup> select(SearchInfo info);
 	
-	@Insert("insert into activity_usergroup (name,activity_id,ids,project,path,point1,point2,point3,point4,point5,createdate,operator_id,comments) values(#{name},#{activity_id},#{ids},#{project},#{path},#{point1},#{point2},#{point3},#{point4},#{point5},#{createdate},#{operator_id},#{comments})")
+	@Insert("insert into activity_usergroup (name,activity_id,ids,project,path,point1,point2,point3,point4,point5,point6,createdate,operator_id,comments) values(#{name},#{activity_id},#{ids},#{project},#{path},#{point1},#{point2},#{point3},#{point4},#{point5},#{point6},#{createdate},#{operator_id},#{comments})")
 	public void insert(UserGroup u);
 	
 	@Delete("delete from activity_usergroup where id=#{id}")
@@ -30,7 +30,7 @@ public interface UserGroup_Mapper {
 	@Update("update activity_usergroup set name=#{name},ids=#{ids},project=#{project} where id=#{id}")
 	public void update(UserGroup u);
 	
-	@Update("update activity_usergroup set point1=#{point1},point2=#{point2},point3=#{point3},point4=#{point4},point5=#{point5},comments=#{comments} where id=#{id}")
+	@Update("update activity_usergroup set point1=#{point1},point2=#{point2},point3=#{point3},point4=#{point4},point5=#{point5},point6=#{point6},comments=#{comments} where id=#{id}")
 	public void upscore(UserGroup u);
 	
 	@Select("select * from activity_usergroup where id=#{id}")

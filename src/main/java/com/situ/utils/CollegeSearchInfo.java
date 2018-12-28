@@ -4,8 +4,6 @@ public class CollegeSearchInfo extends SearchInfo{
 	private String name;
 	private Integer select;
 	
-	
-	
 	public String getName() {
 		return name;
 	}

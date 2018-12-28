@@ -5,9 +5,6 @@ public class SearchInfo {
 	private int page=1;
 	private String where="";
 	private String limits="";
-	
-	
-	
 
 	public int getLimit() {
 		return limit;

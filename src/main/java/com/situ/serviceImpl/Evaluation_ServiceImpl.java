@@ -10,6 +10,7 @@ import com.situ.entity.Evaluation;
 import com.situ.entity.Operator;
 import com.situ.mapper.Evaluation_Mapper;
 import com.situ.service.Evaluation_Service;
+import com.situ.utils.CheckWorkSearchInfo;
 import com.situ.utils.EvaluationSearchInfo;
 import com.situ.utils.SearchInfo;
 
@@ -82,6 +83,11 @@ public class Evaluation_ServiceImpl implements Evaluation_Service {
 	@Override
 	public Evaluation s_evaluation(EvaluationSearchInfo info) {
 		return edao.s_evaluation(info);
+	}
+
+	@Override
+	public List<Evaluation> selectsingle(CheckWorkSearchInfo info) {
+		return edao.selectsingle(info);
 	}
 
 	

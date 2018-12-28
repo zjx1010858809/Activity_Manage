@@ -7,9 +7,7 @@ public class ActivitySearchInfo extends SearchInfo {
 	private Integer type;
 	private String ids;
 	private String add_ids;
-	
-	
-	
+
 	public String getAdd_ids() {
 		return add_ids;
 	}

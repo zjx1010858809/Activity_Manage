@@ -15,9 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.situ.entity.Activity;
 import com.situ.entity.Activity_Time;
+import com.situ.entity.FeedBack;
 import com.situ.entity.Operator;
+import com.situ.service.Activity_Service;
 import com.situ.service.Activity_Time_Service;
+import com.situ.service.FeedBack_Service;
 import com.situ.service.Operator_Service;
 import com.situ.utils.ActivitySearchInfo;
 import com.situ.utils.JsonInfo;
@@ -29,6 +33,10 @@ public class Activity_Time_Controller {
 	Activity_Time_Service service;
 	@Autowired
 	Operator_Service operator_Service;
+	@Autowired
+	Activity_Service activity_Service;
+	@Autowired
+	FeedBack_Service feedBack_service;
 
 	Date date = new Date();
 	static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -189,10 +197,24 @@ public class Activity_Time_Controller {
 	@RequestMapping("Add")
 	@ResponseBody
 	public JsonInfo add(Activity_Time activity_Time) {
-		int i = service.add(activity_Time);
-		if (i > 0) {
+		int id = service.add(activity_Time);
+		int m = 0;
+		//生成反馈表
+		Activity activity = activity_Service.getbyid(activity_Time.getActivity_id());
+		String ids = activity.getUser_ids();
+		FeedBack feedBack = new FeedBack();
+		feedBack.setActivity_time_id(id);
+		if (ids.length() > 0) {
+			String user_id[] = ids.split(",");
+			// 为每个学生生成反馈表
+			for (int j = 0; j < user_id.length; j++) {
+				feedBack.setUser_id(Integer.valueOf(user_id[j]));
+				m = m + feedBack_service.insert(feedBack);
+			}
+		}
+		if(m>0) {
 			return new JsonInfo(0, "新增成功");
-		} else {
+		}else {
 			return new JsonInfo(1, "新增异常");
 		}
 	}

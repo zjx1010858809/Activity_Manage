@@ -46,8 +46,9 @@ public class CheckWork_ServiceImpl implements CheckWork_Service {
 	}
 
 	@Override
-	public List<Checkwork> selectDate(int activity_id) {
-		return cmapper.selectDate(activity_id);
+
+	public List<Checkwork> selectDate(CheckWorkSearchInfo info) {
+		return cmapper.selectDate(info);
 	}
 
 	@Override

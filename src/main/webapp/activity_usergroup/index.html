@@ -14,19 +14,6 @@ layui.use(['table','layer'], function(){
 	var layer=layui.layer;
 });
 
-//新增分组
-  function addUserGroup(title,content,width,height) {
-	  
-		layer.open({
-			type : 2,
-			title:title,
-			area : [ width+'px', height+'px' ],
-			fixed : false, //不固定
-			maxmin : false,
-			content : content+"?activity_id="+$("#choiceActivity").val()+"",
-		});
-	}
-
   </script>
 </head>
 <body>
@@ -34,7 +21,7 @@ layui.use(['table','layer'], function(){
 
 <form class="layui-form">
 	<div class="layui-form-item">
-		<div class="layui-inline" style="margin-left: 10px;">
+		<div class="layui-inline demoTable" style="margin-left: 10px;">
 			<input class="layui-btn" type="button" onclick="addUserGroup('新增','../Activity_UserGroup/add',670,400);" value="新增"/>
 		</div>
 		<div class="layui-inline">
@@ -64,6 +51,23 @@ layui.use(['table','layer'], function(){
 
 </body>
 <script>
+$(function(){
+	$.post(
+		'../sessionCode',
+		function(data){
+			if(data == 0){
+				$(".demoTable").remove();
+			}else if(data == 1){
+				
+			}else{
+				alert("网络异常");
+				location.href="redirect:login.html";
+			}
+		}
+	)
+});
+
+
 layui.use(['table','layer'], function(){
   var table = layui.table;
   var layer=layui.layer;
@@ -91,7 +95,6 @@ layui.use(['table','layer'], function(){
   var $ = layui.$, active = {
   	reload : function() {
   		//执行重载
-  		debugger;
   		table.reload('UserGroupTable', { 
   			where : {
   				name : $("#UserGroupName").val(),
@@ -107,6 +110,8 @@ layui.use(['table','layer'], function(){
   	active[type] ? active[type].call(this) : '';
   });
   
+
+  
 //监听事件
   table.on('tool(UserGrouptable)', function(obj){
 	    var data = obj.data;
@@ -120,9 +125,11 @@ layui.use(['table','layer'], function(){
 	    			 if(res.status==1){
 	    				 obj.del();
 	    			     layer.close(index);
+	    			     table.reload('UserGroupTable');
 	    			 }else{
 	    				 layer.msg('删除失败请重新操作');
 	    				 layer.close(index);
+	    				 table.reload('UserGroupTable');
 	    			 }
 	    		 }
 	    	  });
@@ -137,6 +144,9 @@ layui.use(['table','layer'], function(){
 				fixed : false, //不固定
 				maxmin : false,
 				content : '../Activity_UserGroup/edit?id='+data.id,
+				end:function(){
+					table.reload('UserGroupTable');
+				}
 			});
 	    }else if(obj.event=='score'){
 	    	layer.open({
@@ -146,6 +156,9 @@ layui.use(['table','layer'], function(){
 				fixed : false, //不固定
 				maxmin : false,
 				content : '../Activity_UserGroup/score?id='+data.id,
+				end:function(){
+					table.reload('UserGroupTable');
+				}
 			});
 	    }else if(obj.event=='details'){
 	    	layer.open({
@@ -161,7 +174,21 @@ layui.use(['table','layer'], function(){
   
 });
 
-
+//新增分组
+function addUserGroup(title,content,width,height) {
+	  
+		layer.open({
+			type : 2,
+			title:title,
+			area : [ width+'px', height+'px' ],
+			fixed : false, //不固定
+			maxmin : false,
+			content : content+"?activity_id="+$("#choiceActivity").val()+"",
+			end:function(){
+				table.reload('UserGroupTable');
+			}
+		});
+	}
 
 //下拉框选择学校
 layui.use('form', function() {

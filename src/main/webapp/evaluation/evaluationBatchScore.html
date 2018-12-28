@@ -44,7 +44,7 @@ $(function(){
 				<label class="layui-form-label"
 					style="width: 60px; padding-left: 2px; padding-left: 2px; padding-right: 2px">分数：</label>
 				<div class="layui-input-inline" style="width: 140px">
-					<input type="number" style="width: 120px;" name="point" class="layui-input" value="">
+					<input type="number" style="width: 120px;" name="point" class="layui-input pointss" value="">
 				</div>
 			</div>
 		</div>
@@ -66,17 +66,22 @@ $(function(){
 			var layer = layui.layer;
 
 			$('.submit').on('click', function() {
-				$.post("../Evaluation/batchScore", $('.layui-form').serialize(),
-						function(json) {
-							if (json.status > 0) {
-								layer.msg(json.url);
-								var index = parent.layer.getFrameIndex(window.name);
-								parent.layer.close(index);
-								//parent.location.reload();
-							} else {
-								layer.msg(json.url);
-							}
-						});
+				if($(".pointss").val()==""){
+					layer.msg("分数不能为空");
+				}else{
+					$.post("../Evaluation/batchScore", $('.layui-form').serialize(),
+							function(json) {
+								if (json.status > 0) {
+									layer.msg(json.url);
+									var index = parent.layer.getFrameIndex(window.name);
+									parent.layer.close(index);
+									//parent.location.reload();
+								} else {
+									layer.msg(json.url);
+								}
+							});
+				}
+				
 			});
 		});
 	</script>

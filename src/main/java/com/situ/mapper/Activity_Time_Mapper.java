@@ -48,4 +48,7 @@ public interface Activity_Time_Mapper {
 	
 	@Select("select a.name activity_name,at.date from activity_time at INNER JOIN activity a ON at.activity_id = a.id")
 	public List<Activity_Time> canlender();
+	
+	@Select("select @@identity AS 'identity'")
+	public int selectIdentity();
 }

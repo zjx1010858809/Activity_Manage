@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.situ.entity.Activity_Time;
 import com.situ.entity.Operator;
@@ -48,8 +49,11 @@ public class Activity_Time_ServiceImpl implements Activity_Time_Service{
 	}
 
 	@Override
+	@Transactional
 	public int add(Activity_Time activity_Time) {
-		return mapper.add(activity_Time);
+		mapper.add(activity_Time);
+		int id = mapper.selectIdentity();
+		return id;
 	}
 
 	@Override

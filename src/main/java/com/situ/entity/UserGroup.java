@@ -12,6 +12,7 @@ public class UserGroup {
 	private int point3=0;
 	private int point4=0;
 	private int point5=0;
+	private int point6=0;
 	private String createdate;
 	private int operator_id;
 	private String comments="";
@@ -95,6 +96,12 @@ public class UserGroup {
 	}
 	public void setPoint5(int point5) {
 		this.point5 = point5;
+	}
+	public int getPoint6() {
+		return point6;
+	}
+	public void setPoint6(int point6) {
+		this.point6 = point6;
 	}
 	public String getCreatedate() {
 		return createdate;

@@ -31,8 +31,8 @@ public class Market_ServiceImpl implements Market_Service {
 	}
 
 	@Override
-	public void insert(Market r) {
-		mmapper.insert(r);
+	public void insert(Market m) {
+		mmapper.insert(m);
 	}
 
 	@Override
@@ -41,8 +41,8 @@ public class Market_ServiceImpl implements Market_Service {
 	}
 
 	@Override
-	public void update(Market r) {
-		mmapper.update(r);
+	public void update(Market m) {
+		mmapper.update(m);
 	}
 
 	@Override

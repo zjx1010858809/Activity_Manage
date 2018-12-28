@@ -7,7 +7,7 @@ import com.situ.utils.CheckWorkSearchInfo;
 
 public interface CheckWork_Service {
 	
-	public List<Checkwork> selectDate(int activity_id);
+	public List<Checkwork> selectDate(CheckWorkSearchInfo info);
 	
 	public List<Checkwork> select(CheckWorkSearchInfo info);
 	
