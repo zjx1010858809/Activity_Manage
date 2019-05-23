@@ -12,7 +12,7 @@
     
     <#if schoolName??>
     <div class="layui-inline" style="margin-top: 20px;">
-    <label class="layui-form-label">学校</label>
+    <label class="layui-form-label">学院</label>
     <div class="layui-input-block" style="width: 190px;">
     	<input type="hidden" class="school_id" value="${schoolName.id}">
     	<input type="text" class="layui-input" readonly="readonly" value="${schoolName.name}">
@@ -22,7 +22,7 @@
 	</#if>
 	
     <div class="layui-inline" style="margin-top: 20px;">
-      <label class="layui-form-label">学院</label>
+      <label class="layui-form-label">专业</label>
       <div class="layui-input-block" style="width: 190px;">
       <#if collegeList??>
       	<input type="hidden" class="school_id" value="${collegeList.school_id}">
@@ -63,7 +63,7 @@ function addCollege(){
 				if(res.status==1){
 					var index=parent.layer.getFrameIndex(window.name);
 					parent.layer.close(index);
-					parent.location.reload();
+					//parent.location.reload();
 				}else{
 					alert('失败');
 				}
@@ -89,7 +89,7 @@ function editCollege(){
 				if(res.status==1){
 					var index=parent.layer.getFrameIndex(window.name);
 					parent.layer.close(index);
-					parent.location.reload();
+//					parent.location.reload();
 				}else{
 					alert('失败');
 				}

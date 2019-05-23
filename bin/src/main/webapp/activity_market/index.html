@@ -27,9 +27,7 @@
 </form>
 <table class="layui-hide" id="Markettable" lay-filter="Markettable"></table>
 <script type="text/html" id="barMarket">
-	<a class="layui-btn layui-btn-xs" lay-event="see">详情</a>
 	<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-	<a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="json">学生信息</a>
 </script>
 
 </body>
@@ -60,7 +58,6 @@ layui.use(['table','layer','form'], function(){
   var $ = layui.$, active = {
   	reload : function() {
   		//执行重载
-  		debugger;
   		table.reload('MarketTable', { 
   			where : {
   				activityselect : $("#marketChoiceActivity").val()
@@ -84,22 +81,14 @@ layui.use(['table','layer','form'], function(){
 	    	layer.open({
 				type : 2,
 				title:'日报',
-				area : ['350px','300px' ],
+				area : ['660px', '450px'],
 				fixed : false, //不固定
 				maxmin : false,
-				content : '../Activity_Market/edit?id='+data.id
+				content : '../Activity_Market/edit?id='+data.id,
+				end:function(){
+					table.reload('MarketTable');
+				}
 			});
-	    }else if(obj.event==='json'){
-	    	layer.open({
-				type : 2,
-				title:'学生信息',
-				area : ['700px','400px' ],
-				fixed : false, //不固定
-				maxmin : false,
-				content : '../Activity_Market/info_json?id='+data.id,
-			});
-	    }else if(obj.event==='see'){
-	    	alert("详情");
 	    }
 	  });
   
@@ -113,13 +102,6 @@ layui.use(['table','layer','form'], function(){
 	  });
 
 });
-
-
-
-
-
-		
-
 
 </script>
 

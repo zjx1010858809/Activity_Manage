@@ -16,7 +16,7 @@ layui.use(['table','layer'], function(){
 	var layer=layui.layer;
 });
 
-//新增合作院校
+//新增活动总结
   function addSummary(title,content,width,height) {
 	  
 		layer.open({
@@ -147,7 +147,7 @@ layui.use(['table','layer','form','laydate'], function(){
 	    }
 	  });
   
-//活动选择下拉框
+//讲师选择下拉框
 	$.post("../Activity_Summary/operator",function(result){
 	   	var operatorObj = result;
 	   	for(var i = 0;i < operatorObj.length;i++){

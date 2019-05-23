@@ -18,7 +18,7 @@
 			<div class="layui-input-inline">
 				<select class="querySelect layui-unselect" lay-filter="activity_querySelect">
 					<option value="type" selected='selected'>类型查询</option>
-					<option value="school">学校查询</option>
+					<option value="school">学院查询</option>
 				</select>
 			</div>
 			<div class="layui-input-inline type query" style="display:block">
@@ -30,7 +30,7 @@
 			</div>
 			<div class="layui-input-inline school query" style="display:none">
 				<select class="schoolSelect" lay-filter="school">
-					<option value="">请选择学校</option>
+					<option value="">请选择学院</option>
 				</select>
 			</div>
 		</div>
@@ -98,7 +98,7 @@
 			, cols: [[
 				{ field: 'name', title: '活动名称', width: 160, align: 'center' },
 				{ field: 'dateinfo', title: '日期安排', width: 160, align: 'center' },
-				{ field: 'school', title: '学校', width: 180, align: 'center' },
+				{ field: 'school', title: '学院', width: 180, align: 'center' },
 				{ field: 'count', title: '人数', width: 60, align: 'center' },
 				{ field: 'typeName', title: '类型', width: 60, align: 'center' },
 				{ field: 'statusName', title: '状态', width: 60, align: 'center' },
@@ -142,7 +142,7 @@
 					fixed: false, //不固定
 					maxmin: false,
 					content: 'student.html?user_ids=' + data.user_ids + "&id=" + data.id,
-					cancel: function (index) {
+					end: function (index) {
 						table.reload('activityTable', {
 							where: {
 							}
@@ -189,7 +189,7 @@
 				layer.open({
 					title: '测评',
 					type: 2,
-					area: ['700px', '525px'], //宽高
+					area: ['700px', '485px'], //宽高
 					maxmin: false, //开启最大化最小化按钮
 					content: "../evaluation/index.html?f_id="+id,
 					// success: function (layero, index) {

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.situ.entity.Activity;
 import com.situ.entity.Evaluation;
+import com.situ.entity.Login;
 import com.situ.entity.Operator;
 import com.situ.entity.Summary;
 import com.situ.service.Activity_Service;
@@ -19,6 +22,7 @@ import com.situ.service.Evaluation_Service;
 import com.situ.service.Operator_Service;
 import com.situ.service.Summary_Service;
 import com.situ.utils.JsonInfo;
+import com.situ.utils.OperatorInfo;
 import com.situ.utils.SearchInfo;
 import com.situ.utils.SummarySearchInfo;
 @Controller
@@ -91,16 +95,21 @@ public class Summary_Controller {
 //json自动填充活动
 	@RequestMapping("operator")
 	@ResponseBody
-	public List<Operator> school() throws Exception {
-		return oservice.selectall();
+	public List<Operator> school(OperatorInfo info){
+		String where="";
+		where = "where type = 0 ";
+		info.setWhere(where);
+		List<Operator> l = oservice.index(info);
+		return l;
 	}
 
 //新增
 	@RequestMapping("insert")
 	@ResponseBody
-	public JsonInfo insert(Summary c) {
+	public JsonInfo insert(Summary c,HttpSession session) {
 		
-		c.setOperator_id(1);
+		Login oper=(Login) session.getAttribute("registers");
+		c.setOperator_id(oper.getId());
 		
 		rservice.insert(c);
 		return new JsonInfo(1,"");

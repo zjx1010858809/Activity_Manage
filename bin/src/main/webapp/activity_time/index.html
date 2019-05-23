@@ -188,16 +188,35 @@
 						fixed: false, //不固定
 						maxmin: true,
 						content: "../Activity_Time/selectById?id=" + data.id,
+						end:function(){
+							table.reload('activityTimeTable');
+						}
 					});
 				} else if (obj.event === 'report') {
 					layer.open({
 						type: 2,
-						title: "详情修改",
+						title: "日报",
 						area: ['660px','450px'], //宽高
 						maxmin: true, //开启最大化最小化按钮
 						fixed: false, //不固定
 						maxmin: false,
 						content: "../Activity_Report/edit?activity_id=" + data.activity_id + "&date=" + data.date,
+						end:function(){
+							table.reload('activityTimeTable');
+						}
+					});
+				}else if (obj.event === 'market') {
+					layer.open({
+						type: 2,
+						title: "市场活动",
+						area: ['660px', '450px'], //宽高
+						maxmin: true, //开启最大化最小化按钮
+						fixed: false, //不固定
+						maxmin: false,
+						content: "../Activity_Market/edit?activity_id=" + data.activity_id + "&date=" + data.date,
+						end:function(){
+							table.reload('activityTimeTable');
+						}
 					});
 				}else if(obj.event === 'checkwork'){
 					$.post(
@@ -205,8 +224,8 @@
 						{
 							id : data.id,
 						},
-						function(data){
-							if(data.status == 1){
+						function(res){
+							if(res.status == 1){
 								layer.open({
 									type: 2,
 									title: "考勤",
@@ -214,7 +233,10 @@
 									maxmin: true, //开启最大化最小化按钮
 									fixed: false, //不固定
 									maxmin: false,
-									content: "../activity_checkwork/index.html"
+									content: "../activity_checkwork/index.html?activity_id=" + data.activity_id + "&date=" + data.date,
+						  			end:function(){
+										table.reload('activityTimeTable');
+									}
 								});
 							}else{
 								alert(1);
@@ -222,6 +244,19 @@
 						}
 					)
 					
+				}else if(obj.event === 'feedback'){
+					layer.open({
+						type: 2,
+						title: "学生反馈",
+						area: ['750px','500px'], //宽高
+						maxmin: true, //开启最大化最小化按钮
+						fixed: false, //不固定
+						maxmin: false,
+						content: "feedback.html?id="+data.id,
+						end:function(){
+							table.reload('activityTimeTable');
+						}
+					});
 				}else if (obj.event === 'cancel') {
 					id = data.id;
 					if (data.status == 2) {
@@ -277,7 +312,7 @@
 
 			$(".add").click(function () {
 				layer.open({
-					title: '活动日程安排',
+					title: '教师回应',
 					type: 2,
 					area: ['1000px', '380px'], //宽高
 					maxmin: true, //开启最大化最小化按钮

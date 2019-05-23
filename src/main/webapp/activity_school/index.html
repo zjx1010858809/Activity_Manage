@@ -39,7 +39,7 @@ layui.use(['table','layer'], function(){
 <div style="display: inline;">
   搜索学校：
   <div class="layui-inline">
-    <input class="layui-input" name="id" id="schoolName" placeholder="请输入学校名..." autocomplete="off">
+    <input class="layui-input" name="id" id="schoolName" placeholder="请输入学院名..." autocomplete="off">
   </div>
   <button class="layui-btn" data-type="reload" id="searchSchool">搜索</button>
 </div>
@@ -68,7 +68,7 @@ layui.use(['table','layer'], function(){
   table.render({
     elem: '#Schooltable'
     ,url:'../Activity_School/index_json'
-    ,title: '学校学院管理'
+    ,title: '学院管理'
     ,height:398
     ,id:'schoolTable'
     ,groups: 1 //只显示 1 个连续页码
@@ -76,9 +76,8 @@ layui.use(['table','layer'], function(){
 	,last: false //不显示尾页
 	,page:{layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] }//自定义分页布局
     ,cols: [[
-      {field:'id', title:'ID', width:259,align:'center'}
-      ,{field:'name', title:'学校', width:270,sort: true,align:'center'}
-      ,{fixed: 'right', title:'操作', toolbar: '#barSchool', width:250,align:'center'}
+    	{field:'name', title:'学校', width:385,sort: true,align:'center'},
+    	{fixed: 'right', title:'操作', toolbar: '#barSchool', width:200,align:'center'}
     ]]
   });
 //监听事件
@@ -110,7 +109,7 @@ layui.use(['table','layer'], function(){
 				area : ['320px','200px' ],
 				fixed : false, //不固定
 				maxmin : false,
-				content : '../Activity_School/edit?id='+data.id,
+				content : '../Activity_School/edit?id='+data.id
 			});
 	    }
 	  });

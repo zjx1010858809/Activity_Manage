@@ -25,6 +25,10 @@
 							<input type="text" class="layui-input name"
 								value=${activity.name}>
 						</div>
+						<div class="layui-input-inline" style="display: none;">
+							<input type="text" class="layui-input id"
+								value=${activity.id}>
+						</div>
 						<label class="layui-form-label">课程信息：</label>
 						<div class="layui-input-inline">
 							<input type="text" class="layui-input courseInfo"
@@ -54,15 +58,15 @@
 					</div>
 					<label class="layui-form-label">计划安排：</label>
 					<div class="layui-input-block" style="width: 450px">
-						<textarea name="" class="layui-textarea planinfo"
-							style="height: 150px"></textarea>
+						<textarea name="" class="layui-textarea planInfo"
+							style="height: 150px">${activity.planinfo}</textarea>
 					</div>
 				</form>
 			</div>
 			<div class="layui-tab-item tab2">
 				<form class="layui-form" style="margin-top: 15px">
 					<div class="layui-form-item">
-						<label class="layui-form-label">来源人：</label>
+						<!-- <label class="layui-form-label">来源人：</label>
 						<div class="layui-input-inline">
 							<select class="layui-unselect source_operator">
 								<option value="0">-</option>
@@ -73,7 +77,7 @@
 							<select class="layui-unselect Instructor_user">
 								<option value="0">-</option>
 							</select>
-						</div>
+						</div> -->
 						<label class="layui-form-label">参与学校：</label>
 						<div class="layui-input-inline">
 							<input type="text" class="layui-input school"
@@ -121,24 +125,15 @@
 				}else{
 					$(".operator").append("<option value=" + operatorObj[m]['id'] + ">" + operatorObj[m]['name'] + "</option>");
 				}
-				if(operatorObj[m]['id'] == ${activity.source_operator_id}){
-					$(".source_operator").append("<option value=" + operatorObj[m]['id'] + " selected='selected'>" + operatorObj[m]['name'] + "</option>");
-				}else{
-					$(".source_operator").append("<option value=" + operatorObj[m]['id'] + ">" + operatorObj[m]['name'] + "</option>");
-				}
-				/* 此处为辅导员自动填充 */
-				/* if(operatorObj[m]['id'] == ${activity.Instructor_user_id}){
-					$(".Instructor_user").append("<option value=" + operatorObj[m]['id'] + " selected='selected'>" + operatorObj[m]['name'] + "</option>");
-				}else{
-					$(".Instructor_user").append("<option value=" + operatorObj[m]['id'] + ">" + operatorObj[m]['name'] + "</option>");
-				} */
 			}
 			form.render('select');
 		});
 		$(".edit").click(function () {
 			$.post(
-				'',
+				'../Activity/update',
 				{
+					//id
+					id: $(".id").val(),
 					//课程信息
 					courseinfo: $(".courseInfo").val(),
 					//计划信息
@@ -150,18 +145,18 @@
 					//活动名	
 					name: $(".name").val(),
 					//来源人	
-					source_operator_id: $(".source_operator").val(),
+					/* source_operator_id: $(".source_operator").val(), */
 					//注意事项
 					attention: $(".attention").val(),
 					//活动类型	
 					type: $(".type").val(),
 					//辅导员id
-					Instructor_user_id: $(".Instructor_user").val(),
+					/* Instructor_user_id: $(".Instructor_user").val(), */
 					//负责人	
 					operator_id: $(".operator").val(),
 					//备注
 					comments: $(".comments").val(),
-					//最后修改人		
+					//最后修改人
 					charge_operator_id: 0,
 				},
 				function (data) {

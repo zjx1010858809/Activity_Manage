@@ -126,6 +126,12 @@
 				}else{
 					$(".source_operator").append("<option value=" + operatorObj[m]['id'] + ">" + operatorObj[m]['name'] + "</option>");
 				}
+				/* 此处为辅导员自动填充 */
+				/* if(operatorObj[m]['id'] == ${activity.Instructor_user_id}){
+					$(".Instructor_user").append("<option value=" + operatorObj[m]['id'] + " selected='selected'>" + operatorObj[m]['name'] + "</option>");
+				}else{
+					$(".Instructor_user").append("<option value=" + operatorObj[m]['id'] + ">" + operatorObj[m]['name'] + "</option>");
+				} */
 			}
 			form.render('select');
 		});

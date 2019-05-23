@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>项目二</title>
+<title>校园活动管理系统</title>
 <link href="css/login.css" rel="stylesheet" rev="stylesheet"
 	type="text/css" media="all" />
 <script type="text/javascript" src="js/jQuery1.7.js"></script>
@@ -147,67 +147,33 @@
 		var width = $(window).width();
 		$(".screenbg ul img").css("width", width + "px");
 	});
-
 	var a = 0;
 	function changerimg(o) {
 		o.src = "images/code.jpg?a=" + (a++);
 	}
 </script>
 </head>
-
 <body>
 	<div id="tab">
 		<ul class="tab_menu">
-			<li class="selected">用户登录</li>
-			<li>教师登录</li>
+			<li class="selected">教师登录</li>
 		</ul>
-		<div class="tab_box">
-			<!-- 学生登录开始 -->
-			<div>
-				<div class=""></div>
-				<form action="logins" method="post" class="stu_login_error slogin">
-					<div id="username">
-						<label>用户名：</label> 
-						<input type="text" id="stu_username_hide" name="nike" placeholder="输入登录账户" value="" datatype="s6-18"
-							errormsg="用户名范围在6~18个字符之间！" sucmsg="用户名验证通过！" />
-							<input type="hidden" name="myid" value="0"></input>
-					</div>
-					<div id="password">
-						<label>密&nbsp;&nbsp;&nbsp;码：</label> <input type="password"
-							id="stu_password_hide" name="pass" placeholder="输入密码" value=""
-							datatype="*6-16" errormsg="密码范围在6~16位之间！" sucmsg="密码验证通过！" />
-					</div>
-					<div style="height: 80px;">
-						<label>验证码：</label> <input type="text" style="width: 100px;"
-							name="code" placeholder="输入验证码" value="" datatype="*4-4"
-							errormsg="验证码有4位数！" sucmsg="验证码验证通过！" /> <img
-							src="images/code.jpg" onclick="changerimg(this);"
-							style="position: relative; height: 40px; top: 016px;"
-							title="点击更换" alt="验证码占位图" />
-					</div>
-					<div id="login">
-						<button type="submit" onclick="slogins();">登录</button>
-					</div>
-				</form>
-			</div>
-			<!-- 学生登录结束-->
+		<div class="tab_box">			
 			<!-- 导师登录开始-->
-			<div class="hide">
+			<div class="">
 				<div class=""></div>
 				<form action="logins" method="post" class="tea_login_error tlogin">
 					<div id="username">
 						<label>用户名：</label> <input type="text" id="tea_username_hide"
 							name="nike" placeholder="输入登录账户" value="" datatype="s6-18"
-							errormsg="用户名范围在6~18个字符之间！" sucmsg="用户名验证通过！" /> <input
-							type="hidden" name="myid" value="1"></input>
-						<!--ajaxurl="demo/valid.jsp"-->
+							errormsg="用户名范围在6~18个字符之间！" sucmsg="用户名验证通过！" />
+							<input type="hidden" name="myid" value="1"></input>
 					</div>
 					<div id="password">
 						<label>密&nbsp;&nbsp;&nbsp;码：</label> <input type="password"
 							id="tea_password_hide" placeholder="输入密码" name="pass" value=""
 							datatype="*6-16" errormsg="密码范围在6~16位之间！" sucmsg="密码验证通过！" />
 					</div>
-
 					<div style="height: 80px;">
 						<label>验证码：</label> <input type="text" style="width: 100px;"
 							name="code" placeholder="输入验证码" value="" datatype="*4-4"
@@ -218,7 +184,6 @@
 					</div>
 					<div id="login">
 						<button type="submit" onclick="tlogins();">登录</button>
-						<!-- <input type="button" onclick="tlogins();" value="登录" style="width:160px"/> -->
 					</div>
 				</form>
 			</div>
@@ -232,29 +197,6 @@
 		</ul>
 	</div>
 	<script type="text/javascript">
-		function slogins() {
-			$.ajax({
-				url : $(".slogin").attr("action"),
-				data : $('.slogin').serialize(),
-				type : "post",
-				success : function(json) {
-					if (json.status == 00) {
-						alert(json.url);
-					} else if (json.status == 0) {
-						alert(json.url);
-					} else if (json.status == 10) {
-						location.href = "index.html";
-					} else if (json.status == 11) {
-						location.href = "index.html";
-					} else if (json.status == 12) {
-						location.href = "index.html";
-					} else {
-						alert(json.url);
-					}
-				},
-			});
-		}
-
 		function tlogins() {
 			$.ajax({
 				url : $(".tlogin").attr("action"),

@@ -28,5 +28,7 @@ public List<Activity> selectAll(ActivitySearchInfo info);
 	public String getOption(int id);
 	
 	public int setOption(Activity activity);
+	
+	public void updateall(Activity activity);
 
 }

@@ -80,4 +80,10 @@ public class Activity_ServiceImpl implements Activity_Service{
 		return dao.setOption(activity);
 	}
 
+	@Override
+	public void updateall(Activity activity) {
+		dao.updateall(activity);
+		
+	}
+
 }

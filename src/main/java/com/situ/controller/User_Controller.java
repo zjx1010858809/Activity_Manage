@@ -145,22 +145,7 @@ public class User_Controller {
 		return mv;
 	}
 	
-	//用户查看个人信息
-	@RequestMapping("personView")
-	public ModelAndView personView(HttpSession sesssion) throws Exception {
-		ModelAndView mv = new ModelAndView();
-		Login registers = (Login) sesssion.getAttribute("registers");
-		int id = registers.getId();
-		User u = service.getById(id);
-		if(u.getType() == 0) {
-			mv.addObject("userView", u);
-			mv.setViewName("users/studentView");
-		}else {
-			mv.addObject("userView", u);
-			mv.setViewName("users/teacherView");
-		}
-		return mv;
-	}
+
 	
 	@RequestMapping("school")
 	@ResponseBody

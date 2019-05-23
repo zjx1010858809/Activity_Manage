@@ -68,10 +68,10 @@
 	<div class="menu">
 		<div class="submenu">
 			<ul>
-				<li><a href="#"><i class="fa fa-cogs"></i></a></li>
+				<!-- <li><a href="#"><i class="fa fa-cogs"></i></a></li>
 				<li><a href="#"><i class="fa fa-users"></i></a></li>
-				<li><a href="#"><i class="fa fa-clock-o"></i></a></li>
-				<li><a href="javascript:openwin('个人信息','User/personView',849,500);" title="个人信息"><i class="fa fa-user"></i></a></li>
+				<li><a href="#"><i class="fa fa-clock-o"></i></a></li> -->
+				<li><a href="javascript:openwin('个人信息','Operator/personView',450,300);" title="个人信息"><i class="fa fa-user"></i></a></li>
 				<li><a href="login.html" title="退出登录"><i class="fa fa-sign-out"></i></a></li>
 			</ul>
 		</div>
@@ -79,6 +79,43 @@
 
 	<div class="content">
 		<div class="col-desktop">
+			<div class="app-icon brown operatorTable">
+				<a href="#" onclick="openwin('管理员表','operator/operator_index.html','880','555');">
+					<i class="fa fa-address-book"></i>管理员
+				</a>
+			</div>
+			<div class="app-icon blue_green operatorTable">
+				<a href="javascript:openwin('学院管理','activity_school/index.html',600,500);">
+					<i class="fa fa-graduation-cap"></i>学院管理
+				</a>
+			</div>
+			<div class="app-icon pink operatorTable">
+				<a href="javascript:openwin('专业管理','activity_college/index.html',800,500);">
+					<i class="fa fa-university"></i>专业管理
+				</a>
+			</div>
+			<div class="app-icon blue operatorTable">
+				<a href="javascript:openwin('学生管理','users/index_json.html',1168,500);">
+					<i class="fa  fa-user"></i>学生信息
+				</a>
+			</div>
+			<div class="app-icon red operatorTable">
+				<a href="#" onclick="openwin('活动表','activity/index.html','1130','580');">
+					<i class="fa fa-universal-access"></i>活动管理
+				</a>
+			</div>
+			<div class="app-icon blue_green_light operatorTable">
+				<a href="#" onclick="openwin('日程安排','activity_time/index.html','1130','580');">
+					<i class="fa fa-clock-o"></i>日程安排
+				</a>
+			</div>
+		</div>
+		<div class="col-desktop">
+			<div class="app-icon violet_light">
+				<a href="javascript:openwin('学生分组','activity_usergroup/index.html',915,585);">
+					<i class="fa fa-users"></i>学生分组
+				</a>
+			</div>
 			<div class="app-icon orange userTable">
 				<a href="javascript:openwin('考勤表','activity_checkwork/singleindex.html',700,500);">
 					<i class="fa fa-check-square-o"></i>个人考勤
@@ -89,84 +126,50 @@
 					<i class="fa fa-check-square-o"></i>考勤表
 				</a>
 			</div>
-			<div class="app-icon blue operatorTable">
+			<!-- <div class="app-icon blue operatorTable">
 				<a href="#" onclick="openwin('学生反馈','activity_feedback/info.html',750,500)"><i class="fa  fa-comments-o"></i>学生反馈
 				</a>
-			</div>
+			</div> -->
 			<div class="app-icon blue userTable">
 				<a> <i class="fa  fa-comments-o"></i>效果反馈
 				</a>
 			</div>
-			<div class="app-icon brown operatorTable">
-				<a href="#" onclick="openwin('管理员表','operator/operator_index.html','880','555');">
-					<i class="fa fa-address-book"></i>操作员
-				</a>
-			</div>
-			<div class="app-icon violet_light">
-				<a href="javascript:openwin('学生分组','activity_usergroup/index.html',915,585);">
-					<i class="fa fa-users"></i>学生分组
-				</a>
-			</div>
 			<div class="app-icon blue">
-				<a href="#" onclick="openwin('测评信息','evaluation/index.html',745,480)"> <i class="fa  fa-file-excel-o"></i>测评信息
+				<a href="#" onclick="openwin('测评信息','evaluation/index.html',700,480)"> <i class="fa  fa-file-excel-o"></i>测评信息
 				</a>
 			</div>
-		</div>
-		<div class="col-desktop">
-			<div class="app-icon blue operatorTable">
-				<a href="javascript:openwin('用户管理','users/index_json.html',1168,500);">
-					<i class="fa  fa-user"></i>用户信息
-				</a>
-			</div>
-			<div class="app-icon blue_green operatorTable">
-				<a href="javascript:openwin('学校管理','activity_school/index.html',800,500);">
-					<i class="fa fa-graduation-cap"></i>学校管理
-				</a>
-			</div>
-			<div class="app-icon pink operatorTable">
-				<a href="javascript:openwin('学院管理','activity_college/index.html',800,500);">
-					<i class="fa fa-university"></i>学院管理
-				</a>
-			</div>
-			<div class="app-icon red_black operatorTable">
+			<!-- <div class="app-icon red_black operatorTable">
 				<a href="javascript:openwin('市场活动','activity_market/index.html',749,500);">
 					<i class="fa  fa-handshake-o"></i>市场活动
 				</a>
+			</div> -->
+			<div class="app-icon green_yellow operatorTable">
+				<a href="javascript:openwin('日报','activity_report/index.html',849,500);">
+					<i class="fa  fa-pencil-square-o"></i>日报
+				</a>
 			</div>
-			<div class="app-icon blue_green_light operatorTable">
-				<a href="#" onclick="openwin('活动安排表','activity_time/index.html','1130','580');">
-					<i class="fa fa-clock-o"></i>日程安排
+			<div class="app-icon Violet operatorTable">
+				<a href="javascript:openwin('活动总结','activity_summary/index.html',1120,500);">
+					<i class="fa  fa-database"></i>活动总结
 				</a>
 			</div>
 		</div>
 
 		<div class="col-desktop">
-			<div class="app-icon Violet operatorTable">
-				<a href="javascript:openwin('实训总结','activity_summary/index.html',1120,500);">
-					<i class="fa  fa-database"></i>实训总结
-				</a>
-			</div>
-			<div class="app-icon green_yellow operatorTable">
-				<a href="javascript:openwin('讲师日报','activity_report/index.html',849,500);">
-					<i class="fa  fa-pencil-square-o"></i>讲师日报
-				</a>
-			</div>
-			<div class="app-icon green operatorTable">
+			
+			
+			<!-- <div class="app-icon green operatorTable">
 				<a href="#" onclick="openwin('通知管理','notice/noticeOperation.html',750,500)"><i class="fa fa-commenting"></i>通知管理
 				</a>
-			</div>
-			<div class="app-icon red operatorTable">
-				<a href="#" onclick="openwin('活动表','activity/index.html','1130','580');">
-					<i class="fa fa-universal-access"></i>活动管理
-				</a>
-			</div>
+			</div> -->
+			
 			
 		</div>
 		<div class="col-desktop">
 			
 		</div>
-		<a href="#" onclick="openwin('消息通知','Notice/index',500,300)" style="float: right; margin-right: 8%; margin-top: 35%"><i
-			 class="fa fa-bell fa-2x" style="color: white;"></i></a>
+		<!-- <a href="#" onclick="openwin('消息通知','Notice/index',500,300)" style="float: right; margin-right: 8%; margin-top: 35%"><i
+			 class="fa fa-bell fa-2x" style="color: white;"></i></a> -->
 	</div>
 
 	<!-- Latest compiled and minified JavaScript -->

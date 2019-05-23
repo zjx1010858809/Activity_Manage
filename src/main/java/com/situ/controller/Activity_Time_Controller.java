@@ -25,6 +25,7 @@ import com.situ.service.FeedBack_Service;
 import com.situ.service.Operator_Service;
 import com.situ.utils.ActivitySearchInfo;
 import com.situ.utils.JsonInfo;
+import com.situ.utils.OperatorInfo;
 
 @Controller
 @RequestMapping("Activity_Time")
@@ -163,8 +164,11 @@ public class Activity_Time_Controller {
 
 	@RequestMapping("Operators")
 	@ResponseBody
-	public List<Operator> Operators() {
-		List<Operator> l = operator_Service.selectall();
+	public List<Operator> Operators(OperatorInfo info) {
+		String where="";
+		where = "where type = 0 ";
+		info.setWhere(where);
+		List<Operator> l = operator_Service.index(info);
 		return l;
 	}
 

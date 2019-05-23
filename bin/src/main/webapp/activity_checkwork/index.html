@@ -7,6 +7,13 @@
 <link rel="stylesheet" href="../assets/font-awesome-4.7.0/css/font-awesome.min.css">
 <script src="../assets/layui/layui.js"></script>
 <script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+function GetQueryString(name){
+	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+	var r = window.location.search.substr(1).match(reg);
+	if(r!=null)return  unescape(r[2]); return null;
+};
+</script>
 
 </head>
 <body>
@@ -32,37 +39,49 @@
   <button class="layui-btn" data-type="getCheckData">批量考勤</button>
 </div>
 <table class="layui-hide" id="CheckWorktable" lay-filter="CheckWorktables"></table>
+
 <script type="text/html" id="barCheckWork">
   <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
 </script>
 
 </body>
+
 <script>
+
 layui.use(['table','layer','form','jquery'], function(){
   var table = layui.table,
   layer=layui.layer,
   form = layui.form;
   
+  table.render({
+	    elem: '#CheckWorktable'
+	    ,url:'../Activity_CheckWork/index_json'
+	    ,height:379
+	    ,id:'CheckWorkTable'
+	    ,groups: 1 //只显示 1 个连续页码
+		,first: false //不显示首页
+		,last: false //不显示尾页
+		,page:{layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] }//自定义分页布局
+	    ,cols: [[
+	    	{type: 'checkbox',fixed: 'left'}
+	    	,{field:'uname', title:'姓名', width:130,align:'center',sort: true}
+	    	,{field:'check1list', title:'<a href="#" style="color:red;" class="am">上午</a>', width:130,align:'center'}
+	    	,{field:'check2list', title:'<a href="#" style="color:red;" class="pm">下午</a>', width:130,align:'center'}
+	    	,{field:'check3list', title:'<a href="#" style="color:red;" class="ppm">晚上</a>', width:130,align:'center'}
+	    	,{field:'comments', title:'备注', width:150,align:'center'}
+	      	,{fixed: 'right', title:'操作', toolbar: '#barCheckWork', width:105,align:'center'}
+	    ]]
+	  });
 
-    table.render({
-    elem: '#CheckWorktable'
-    ,url:'../Activity_CheckWork/index_json'
-    ,height:379
-    ,id:'CheckWorkTable'
-    ,groups: 1 //只显示 1 个连续页码
-	,first: false //不显示首页
-	,last: false //不显示尾页
-	,page:{layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] }//自定义分页布局
-    ,cols: [[
-    	{type: 'checkbox',fixed: 'left'}
-    	,{field:'uname', title:'姓名', width:130,align:'center',sort: true}
-    	,{field:'check1list', title:'<a href="#" style="color:red;" class="am">上午</a>', width:130,align:'center'}
-    	,{field:'check2list', title:'<a href="#" style="color:red;" class="pm">下午</a>', width:130,align:'center'}
-    	,{field:'check3list', title:'<a href="#" style="color:red;" class="ppm">晚上</a>', width:130,align:'center'}
-    	,{field:'comments', title:'备注', width:150,align:'center'}
-      	,{fixed: 'right', title:'操作', toolbar: '#barCheckWork', width:105,align:'center'}
-    ]]
-  });
+  if(GetQueryString("activity_id")!=null){
+	  table.reload('CheckWorkTable', {
+			where : {
+				dateselect : GetQueryString("date"),
+				activityselect : GetQueryString("activity_id")
+			}
+		});
+  }
+    
     var arr;
 //active
 	var $ = jQuery = layui.$, active = {
@@ -189,10 +208,31 @@ $('.demoTable .layui-btn').on('click', function(){
 	$.post("../Activity_CheckWork/activity",function(result){
 	   	var activityObj = result;
 	   	for(var i = 0;i < activityObj.length;i++){
-	   		$("#checkChoiceActivity").append("<option value="+activityObj[i]['id']+">"+activityObj[i]['name']+"</option>");
+	   		if(GetQueryString("activity_id")!=null){
+	   			if(GetQueryString("activity_id")==activityObj[i]['id']){
+	   				$("#checkChoiceActivity").append("<option selected='selected' value="+activityObj[i]['id']+">"+activityObj[i]['name']+"</option>");
+	   			}else{
+	   				$("#checkChoiceActivity").append("<option value="+activityObj[i]['id']+">"+activityObj[i]['name']+"</option>");
+	   			}
+	   		}else{
+	   			$("#checkChoiceActivity").append("<option value="+activityObj[i]['id']+">"+activityObj[i]['name']+"</option>");
+	   		}
 	   	}
-	   	var j = activityObj.length-1;
-	   	$.post("../Activity_CheckWork/date?activity_id="+activityObj[j]['id']+"",function(result){
+	   	if(GetQueryString("activity_id")!=null){
+   			$.post("../Activity_CheckWork/date?activity_id="+GetQueryString("activity_id")+"",function(result){
+   			   	var dateObj = result;
+   			   	$("#checkChoiceDate").html("");
+   			   	for(var i = 0;i < dateObj.length;i++){
+   			   		if(GetQueryString("date")==dateObj[i]['date']){
+   			   			$("#checkChoiceDate").append("<option selected='selected' value="+dateObj[i]['date']+">"+dateObj[i]['date']+"</option>");
+   			   		}else{
+   			   			$("#checkChoiceDate").append("<option value="+dateObj[i]['date']+">"+dateObj[i]['date']+"</option>");
+   			   		}
+   			   	}
+   			   	form.render('select');
+   			  });
+   		}else{
+	   	$.post("../Activity_CheckWork/date?activity_id="+activityObj[0]['id']+"",function(result){
 		   	var dateObj = result;
 		   	$("#checkChoiceDate").html("");
 		   	for(var i = 0;i < dateObj.length;i++){
@@ -200,6 +240,7 @@ $('.demoTable .layui-btn').on('click', function(){
 		   	}
 		   	form.render('select');
 		  });
+   		}
 	   	
 	   	form.render('select');
 	  });

@@ -107,8 +107,12 @@ function addUserGroup(){
 	var ids=formSelects.value('selectId', 'valStr');
 	var project=$(".project").val();
 	
-	if(name==""||ids==""||project==""){
-		layer.msg('不能为空');
+	if(name==""){
+		layer.msg('小组名不能为空');
+	}else if(ids==""){
+		layer.msg('成员不能为空');
+	}else if(project==""){
+		layer.msg('项目名不能为空');
 	}else{
 		$.ajax({
 			url:'insert',

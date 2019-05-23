@@ -24,6 +24,9 @@ layui.use(['table','layer'], function(){
 			fixed : false, //不固定
 			maxmin : false,
 			content : content+"?school_id="+$("#choiceSchool").val()+"",
+			end:function(){
+				table.reload('collegeTable');
+			}
 		});
 	}
 
@@ -43,7 +46,7 @@ layui.use(['table','layer'], function(){
 			</select>
 		</div>
 		<div class="layui-inline">
-    		<input class="layui-input" id="collegeName" placeholder="请输入学院名..." autocomplete="off">
+    		<input class="layui-input" id="collegeName" placeholder="请输入专业名..." autocomplete="off">
     	</div>
 		<div class="layui-inline">
 			<input type="button" class="layui-btn" data-type="reload" id="searchCollege" value="搜索">
@@ -65,7 +68,7 @@ layui.use(['table','layer'], function(){
     table.render({
     elem: '#Collegetable'
     ,url:'../Activity_College/index_json'
-    ,title: '学院管理'
+    ,title: '专业管理'
     ,height:388
     ,id:'collegeTable'
     ,groups: 1 //只显示 1 个连续页码
@@ -73,7 +76,7 @@ layui.use(['table','layer'], function(){
 	,last: false //不显示尾页
 	,page:{layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] }//自定义分页布局
     ,cols: [[
-    	{field:'name', title:'学院', width:530,align:'center',sort: true}
+    	{field:'name', title:'专业', width:530,align:'center',sort: true}
       	,{fixed: 'right', title:'操作', toolbar: '#barCollege', width:250,align:'center'}
     ]]
   });
@@ -129,6 +132,9 @@ layui.use(['table','layer'], function(){
 				fixed : false, //不固定
 				maxmin : false,
 				content : '../Activity_College/edit?id='+data.id,
+				end:function(){
+					table.reload('collegeTable');
+				}
 			});
 	    }
 	  });

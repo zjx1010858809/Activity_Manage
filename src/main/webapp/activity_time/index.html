@@ -54,8 +54,8 @@
 		lay-filter="activityTimeFilter"></table>
 
 	<script type="text/html" id="activitTimeBar">
-		<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="feedback">反馈信息</a> 
-		<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="market">市场活动</a>
+		<!--<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="feedback">反馈信息</a> 
+		<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="market">市场活动</a>-->
 		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="alter">修改</a>
 		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="checkwork">考勤</a>
 		<a class="layui-btn layui-btn-xs" lay-event="report">日报</a>
@@ -85,13 +85,11 @@
 
 			$.post("../Activity/selectInSeven",
 				function (result) {
+				console.log(result);
 					var activityObj = result;
-					var j;
 					for (var i = 0; i < activityObj.length; i++) {
 						$(".activitySelect").append("<option value=" + activityObj[i]['id'] + ">" + activityObj[i]['name'] + "</option>");
-						//j = i + 1;
 					}
-					//$(".activitySelect").append("<option value=" + activityObj[j]['id'] + " selected = 'selected'>" + activityObj[j]['name'] + "</option>");
 					form.render('select');
 				});
 

@@ -6,7 +6,13 @@
 <link rel="stylesheet" href="../assets/layui/css/layui.css" />
 <script type="text/javascript" src="../assets/layui/layui.js"></script>
 <script src="../js/jquery-2.1.0.min.js"></script>
-
+<script type="text/javascript">
+function GetQueryString(name){
+	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+	var r = window.location.search.substr(1).match(reg);
+	if(r!=null)return  unescape(r[2]); return null;
+};
+</script>
 <style type="text/css">
 
 .layui-table-tool{
@@ -25,9 +31,15 @@ padding-bottom: 0px!important;
 		$.post("../Evaluation/activity", function(result) {
 			var activityObj = result;
 			for (var i = 0; i < activityObj.length; i++) {
-				$("#evaluationActivity").append(
-						"<option value="+activityObj[i]['id']+">"
-								+ activityObj[i]['name'] + "</option>");
+				if(GetQueryString("f_id")!=null){
+		   			if(GetQueryString("f_id")==activityObj[i]['id']){
+		   				$("#evaluationActivity").append("<option selected='selected' value="+activityObj[i]['id']+">"+activityObj[i]['name']+"</option>");
+		   			}else{
+		   				$("#evaluationActivity").append("<option value="+activityObj[i]['id']+">"+activityObj[i]['name']+"</option>");
+		   			}
+		   		}else{
+				$("#evaluationActivity").append("<option value="+activityObj[i]['id']+">"+activityObj[i]['name'] + "</option>");
+			}
 			}
 			form.render('select');
 		});
@@ -103,9 +115,17 @@ var table;
 				{field : 'point', width : 90, title : '分数', align : 'center', sort : true}, 
 				{field : 'remark', width : 150, title : '评语',align : 'center'}, 
 				{field : 'comments', width : 180, title : '备注', align : 'center'}, 
-				{fixed : 'right', title : '操作', toolbar : '#evaluationBar', width : 115, align : 'center'}, 
+				{fixed : 'right', title : '操作', toolbar : '#evaluationBar', width : 105, align : 'center'}, 
 			] ]
 		});
+		
+		  if(GetQueryString("f_id")!=null){
+			  table.reload('evaluation_table', {
+					where : {
+						activity_id : GetQueryString("f_id")
+					}
+				});
+		  }
 
 		//active
 		var $ = layui.$, active = {

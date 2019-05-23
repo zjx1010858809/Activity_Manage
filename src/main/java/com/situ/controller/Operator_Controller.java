@@ -3,6 +3,8 @@ package com.situ.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -10,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.situ.entity.Login;
 import com.situ.entity.Operator;
+import com.situ.entity.User;
 import com.situ.service.Operator_Service;
 import com.situ.utils.JsonInfo;
 import com.situ.utils.SearchInfo;
@@ -77,6 +81,23 @@ public class Operator_Controller {
 		Operator oper = oservice.getById(id);
 		mv.addObject("oper", oper);
 		mv.setViewName("operator/operatorUpdate");
+		return mv;
+	}
+	
+	//用户查看个人信息
+	@RequestMapping("personView")
+	public ModelAndView personView(HttpSession sesssion) throws Exception {
+		ModelAndView mv = new ModelAndView();
+		Login registers = (Login) sesssion.getAttribute("registers");
+		int id = registers.getId();
+		Operator u = oservice.getById(id);
+		/*if(u.getType() == 0) {
+			mv.addObject("userView", u);
+			mv.setViewName("users/studentView");
+		}else {*/
+			mv.addObject("userView", u);
+			mv.setViewName("users/teacherView");
+		/*}*/
 		return mv;
 	}
 }

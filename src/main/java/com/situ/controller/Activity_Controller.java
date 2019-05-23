@@ -97,8 +97,7 @@ public class Activity_Controller {
 	@RequestMapping("selectInSeven")
 	@ResponseBody
 	public List<Activity> selectInSeven() {
-		ArrayList<Activity> list = new ArrayList<Activity>();
-		list = (ArrayList<Activity>) service.selectInSeven();
+		List<Activity> list = service.selectInSeven();
 		return list;
 	}
 
@@ -148,6 +147,7 @@ public class Activity_Controller {
 	@RequestMapping("insert")
 	@ResponseBody
 	public JsonInfo insert(Activity activity) {
+		activity.setInstructor_user_id(0);
 		int i = service.insert(activity);
 		if (i > 0) {
 			return new JsonInfo(0, "新增成功");
@@ -209,5 +209,11 @@ public class Activity_Controller {
 		mv.addObject("activity", service.selectAll(info).get(0));
 		mv.setViewName("activity/edit");
 		return mv;
+	}
+	
+	@RequestMapping("update")
+	public @ResponseBody JsonInfo update(Activity activity) {
+		service.updateall(activity);
+		return new JsonInfo(0, "修改成功");
 	}
 }

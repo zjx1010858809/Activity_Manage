@@ -45,5 +45,8 @@ public interface Activity_Mapper {
 
 	@Update("update activity set options = #{options} where id = #{id}")
 	public int setOption(Activity activity);
+	
+	@Update("update activity set name=#{name},courseinfo=#{courseinfo},dateinfo=#{dateinfo},operator_id=#{operator_id},type=#{type},planinfo=#{planinfo},school=#{school},comments=#{comments},attention=#{attention} where id=#{id}")
+	public void updateall(Activity activity);
 
 }
