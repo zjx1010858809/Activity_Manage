@@ -66,8 +66,7 @@
 			<ul class="layui-tab-title">
 				<li class="layui-this">基本信息</li>
 				<li>学校信息</li>
-				<li>意向信息</li>
-				<li>相关信息</li>
+				<li>其他信息</li>
 			</ul>
 			<div class="layui-tab-content">
 				<div class="layui-tab-item layui-show">
@@ -149,6 +148,36 @@
 					</div>
 				</div>
 				<div class="layui-tab-item">
+					<div class="layui-form-item" style="margin-top: 25px">
+						<div class="layui-inline">
+							<label class="layui-form-label">状态：</label>
+							<div class="layui-input-inline">
+								<select name="status" lay-verify="required">
+									<option value=""></option>
+									<option value="0">正常</option>
+									<option value="1">禁用</option>
+									<option value="0">过期</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item layui-form-text">
+						<label class="layui-form-label">备注：</label>
+						<div class="layui-input-block" style="margin-right: 50px">
+							<textarea placeholder="请输入内容" class="layui-textarea"
+								name="comments"></textarea>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-input-block" style="text-align: center;">
+							<input class="layui-btn" href="javascript:;"
+								onclick="userInsert();" lay-filter="demo1" type="button"
+								value="提交">
+							<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						</div>
+					</div>
+				</div>
+				<!-- <div class="layui-tab-item">
 					<div class="layui-form-item">
 						<div class="layui-inline">
 							<label class="layui-form-label">报名状态：</label>
@@ -230,7 +259,7 @@
 							<button type="reset" class="layui-btn layui-btn-primary">重置</button>
 						</div>
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</div>
 	</form>

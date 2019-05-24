@@ -70,7 +70,7 @@
 								<option value="0">-</option>
 							</select>
 						</div> -->
-						<label class="layui-form-label">参与学校：</label>
+						<label class="layui-form-label">参与学院：</label>
 						<div class="layui-input-inline">
 							<input type="text" class="layui-input school">
 						</div>
@@ -192,10 +192,10 @@
 					charge_operator_id: 0,
 				},
 				function (data) {
-					alert(data.url);
-					window.parent.location.reload();
+					//alert(data.url);
 					var index = parent.layer.getFrameIndex(window.name);
 					parent.layer.close(index);
+					window.parent.location.reload();
 				} ,
 			)
 		});

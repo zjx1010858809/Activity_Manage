@@ -50,9 +50,20 @@
 						<label class="layui-form-label">活动类型：</label>
 						<div class="layui-input-inline">
 							<select class="layui-unselect type" lay-filter="">
-								<option value="0">实训</option>
-								<option value="1">宣讲</option>
-								<option value="2">比赛</option>
+							<#list ["实训","宣讲","比赛"] as r>
+								<#if activity??>
+      							<!-- 不为空 -->
+      								<#if activity.type==r_index>
+        								<option value="${r_index}" selected="selected">${r}</option>
+        							<#else>
+        								<option value="${r_index}">${r}</option>
+        							</#if>
+        	
+        						<#else>
+        						<!-- 为空 -->
+        							<option value="${r_index}">${r}</option>
+        						</#if>
+        					</#list>
 							</select>
 						</div>
 					</div>
@@ -78,7 +89,7 @@
 								<option value="0">-</option>
 							</select>
 						</div> -->
-						<label class="layui-form-label">参与学校：</label>
+						<label class="layui-form-label">参与学院：</label>
 						<div class="layui-input-inline">
 							<input type="text" class="layui-input school"
 								value="${activity.school}">
@@ -163,6 +174,7 @@
 //					alert(data.url);
 					var index = parent.layer.getFrameIndex(window.name);
 					parent.layer.close(index);
+					window.parent.location.reload();
 				} ,
 			)
 		});

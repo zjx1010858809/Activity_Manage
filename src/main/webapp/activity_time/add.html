@@ -13,39 +13,46 @@
             var form = layui.form;
             laydate.render({
                 elem: '#acTimeAddDate',
+                trigger:'click',
                 min: getTime(),
             });
 
             laydate.render({ 
-            	  elem: '#time1',
-            	  format: 'HH:mm', //可任意组合
+            	elem: '#time1',
+            	trigger:'click',
+            	format: 'HH:mm', //可任意组合
             	type: 'time'
             }); 
            
             laydate.render({ 
-          	  elem: '#time2',
-          	  format: 'HH:mm',type: 'time'
+          	 	elem: '#time2',
+          		trigger:'click',
+          	 	format: 'HH:mm',type: 'time'
 
             });
             
             laydate.render({ 
-          	  elem: '#time3',
-          	  format: 'HH:mm',type: 'time' //可任意组合
+          		elem: '#time3',
+          		trigger:'click',
+          		format: 'HH:mm',type: 'time' //可任意组合
             }); 
             
             laydate.render({ 
               elem: '#time4',
+              trigger:'click',
               format: 'HH:mm',type: 'time' //可任意组合
             }); 
           
             laydate.render({ 
               elem: '#time5',
+              trigger:'click',
               format: 'HH:mm',type: 'time' //可任意组合
             }); 
             
             laydate.render({ 
-          	  elem: '#time6',
-          	  format: 'HH:mm',type: 'time' //可任意组合
+          		elem: '#time6',
+          		trigger:'click',
+          		format: 'HH:mm',type: 'time' //可任意组合
             }); 
           
             $.post("../Activity_Time/teachers",

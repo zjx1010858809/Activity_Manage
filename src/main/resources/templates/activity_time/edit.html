@@ -13,38 +13,45 @@
             var form = layui.form;
             laydate.render({
                 elem: '#acTimeAddDate',
+                trigger:'click',
                 min: getTime(),
             });
             
             laydate.render({ 
-          	  elem: '#e_time1',
-          	  format: 'HH:mm', //可任意组合
-          	type: 'time'
+          		elem: '#e_time1',
+          		trigger:'click',
+          		format: 'HH:mm', //可任意组合
+          		type: 'time'
           }); 
          
           laydate.render({ 
         	  elem: '#e_time2',
+        	  trigger:'click',
         	  format: 'HH:mm',type: 'time'
 
           });
           
           laydate.render({ 
         	  elem: '#e_time3',
+        	  trigger:'click',
         	  format: 'HH:mm',type: 'time' //可任意组合
           }); 
           
           laydate.render({ 
             elem: '#e_time4',
+            trigger:'click',
             format: 'HH:mm',type: 'time' //可任意组合
           }); 
         
           laydate.render({ 
             elem: '#e_time5',
+            trigger:'click',
             format: 'HH:mm',type: 'time' //可任意组合
           }); 
           
           laydate.render({ 
         	  elem: '#e_time6',
+        	  trigger:'click',
         	  format: 'HH:mm',type: 'time' //可任意组合
           }); 
 
