@@ -106,10 +106,9 @@ public class Summary_Controller {
 //新增
 	@RequestMapping("insert")
 	@ResponseBody
-	public JsonInfo insert(Summary c,HttpSession session) {
+	public JsonInfo insert(Summary c) {
 		
-		Login oper=(Login) session.getAttribute("registers");
-		c.setOperator_id(oper.getId());
+		c.setOperator_id(aservice.getbyid(c.getActivity_id()).getOperator_id());
 		
 		rservice.insert(c);
 		return new JsonInfo(1,"");
