@@ -34,6 +34,7 @@ public class Report_Controller {
 	@RequestMapping("edit")
 	@ResponseBody
 	public ModelAndView edit(Report r, CheckWorkSearchInfo info) throws Exception {
+		System.out.println(r.getOperator_id());
 		ModelAndView mv = new ModelAndView();
 		int id = r.getId();
 		Integer activity_id = r.getActivity_id();

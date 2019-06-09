@@ -4,7 +4,7 @@ public class Report {
 	
 	private int id;
 	private int activity_id;
-	private int operator_id = 5;
+	private int operator_id;
 	private String date;
 	private String tprogress="";
 	private String sprogress="";

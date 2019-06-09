@@ -198,7 +198,7 @@
 						maxmin: true, //开启最大化最小化按钮
 						fixed: false, //不固定
 						maxmin: false,
-						content: "../Activity_Report/edit?activity_id=" + data.activity_id + "&date=" + data.date,
+						content: "../Activity_Report/edit?activity_id=" + data.activity_id +"&operator_id="+data.operator_id+ "&date=" + data.date,
 						end:function(){
 							table.reload('activityTimeTable');
 						}
@@ -310,7 +310,7 @@
 
 			$(".add").click(function () {
 				layer.open({
-					title: '教师回应',
+					title: '新增安排',
 					type: 2,
 					area: ['1000px', '380px'], //宽高
 					maxmin: true, //开启最大化最小化按钮
